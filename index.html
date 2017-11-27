@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html>
+    
+  <head>
+    <meta charset="UTF-8" />
+      <title>Kalkulator ekspozicije</title>
+<!--       <link rel="stylesheet" type="text/css" href="style.css">
+      <script type="text/javascript" src="script.js"></script> -->
+  </head>
+
+  <style>
+
+  * {
+    font-size: 14px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+  }
+
+  .wrapper {
+    width: 700px;
+    margin: 100px auto;
+  }
+
+  fieldset {
+    padding: 60px;
+  }
+
+  legend {
+    font-size: 24px;
+  }
+
+  .collapsed {
+    overflow: hidden;
+    height: 0;
+  }
+
+  .parameters {
+    position: relative;
+    padding: 10px 20px;
+  }
+
+  .parameters:nth-child(odd) {
+    background-color: #cde; 
+  }
+
+  label {
+    display: inline-block;
+    width: 60%;
+    vertical-align: middle;
+    padding-right: 20px;
+  }
+
+  label + * {
+    width: 39%;
+  }
+
+  .submit,
+  .back {
+    display: block;
+    margin: 30px auto 0;
+    border: none;
+    height: 40px;
+    width: 140px;
+    background-color: #bbb;
+  }
+
+  .back {
+    margin-top: 0;
+  }
+
+  .submit:hover,
+  .back:hover {
+    background-color: #999;
+  }
+
+  </style>
+    
+  <body>
+
+    <div class="wrapper">
+            
+      <form>
+        <fieldset>
+          <legend>Kalkulator ekspozicije</legend>
+
+          <div class="form">
+            <div class="parameters">
+              <label for="teleskop">Teleskop:</label>
+              <select class="teleskop" name="teleskop">
+                <option value="60cm Cassegrain">60cm Cassegrain</option>
+                <option value="1.4m Nasmyth">1.4m Nasmyth</option>
+              </select>
+            </div>
+
+            <div class="parameters">
+              <label for="ccd">CCD:</label>
+              <select class="ccd" name="ccd">
+                <option value="ANDOR iKonL">ANDOR iKonL</option>
+                <option value="ANDOR iXon 897">ANDOR iXon 897</option>
+                <option value="Apogee U42">Apogee U42</option>
+                <option value="Apogee E47">Apogee E47</option>
+                <option value="SBIG ST10XME">SBIG ST10XME</option>
+              </select>
+            </div>
+
+            <div class="parameters">
+              <label for="filter">Filter:</label>
+              <select class="filter" name="filter">
+                <option value="B">B</option>
+                <option value="V">V</option>
+                <option value="R">R</option>
+                <option value="I">I</option>
+                <option value="L">L</option>
+                <option value="Ha">Ha</option>
+                <option value="Ha-kontinuum">Ha-kontinuum</option>
+                <option value="[SII]">[SII]</option>
+              </select>
+            </div>
+
+            <div class="parameters">
+              <label for="opseg">Opseg filtera:</label>
+              <input class="opseg" type="text" list="opseg">
+              <datalist id="opseg">
+                <option value="400">400</option>
+                <option value="600">600</option>
+              </datalist>
+            </div>
+
+            <div class="parameters">
+              <label for="transparentnost">Ukupna transparentnost na svim optičkim elementima:</label>
+              <input class="transparentnost" type="text">
+            </div>
+
+            <div class="parameters">
+              <label for="transparentnost-neba">Transparentnost neba:</label>
+              <input class="transparentnost-neba" type="text">
+            </div>
+
+            <div class="parameters">
+              <label for="sjaj-neba">Sjaj neba:</label>
+              <input class="sjaj-neba" type="text">
+            </div>
+
+            <div class="parameters">
+              <label for="magnituda">Magnituda:</label>
+              <input class="magnituda" type="text">
+            </div>
+
+            <div class="parameters">
+              <label for="signal-to-noise">S/N:</label>
+              <input class="signal-to-noise" type="text">
+            </div>
+          
+            <input type="button" class="submit" value="Računaj">
+          </div>
+
+          <div class="result collapsed">
+
+            <input type="button" class="back" value="&#8592; Nazad">
+
+          </div>
+        </fieldset>
+
+      </form>
+
+    </div>
+
+    <script>
+
+      window.addEventListener('load', function() {
+
+        var kalkulator = {
+
+          init: function() {
+            this.cacheDom();
+            this.bindEvent('click', this.submit, this.execute.bind(this));
+            this.bindEvent('click', this.back, this.goBack.bind(this));
+          },
+
+          cacheDom: function() {
+            this.teleskop = document.querySelector('.teleskop');
+            this.ccd = document.querySelector('.ccd');
+            this.filter = document.querySelector('.filter');
+            this.opseg_filtera = document.querySelector('.opseg');
+            this.transparentnost_elemenata = document.querySelector('.transparentnost');
+            this.transparentnost_neba = document.querySelector('.transparentnost-neba');
+            this.sjaj_neba = document.querySelector('.sjaj-neba');
+            this.magnituda = document.querySelector('.magnituda');
+            this.signal_to_noise = document.querySelector('.signal-to-noise');
+
+            this.submit = document.querySelector('.submit');
+            this.back = document.querySelector('.back');
+            this.form = document.querySelector('.form');
+            this.result = document.querySelector('.result');
+          },
+
+          execute: function() {
+            this.logger();
+            this.form.classList.add("collapsed");            
+            this.result.classList.remove("collapsed");
+          },
+
+          goBack: function() {
+            this.form.classList.remove("collapsed");            
+            this.result.classList.add("collapsed");
+          },
+
+          logger: function() {
+            console.log("Teleskop: " + this.teleskop.options[this.teleskop.selectedIndex].text);
+            console.log("CCD: " + this.ccd.options[this.ccd.selectedIndex].text);
+            console.log("Filter: " + this.filter.options[this.filter.selectedIndex].text);
+            console.log("Opseg filtera: " + this.opseg_filtera.value);
+            console.log("Transparentnost elemenata: " + this.transparentnost_elemenata.value);
+            console.log("Transparentnost neba: " + this.transparentnost_neba.value);
+            console.log("Sjaj neba: " + this.sjaj_neba.value);
+            console.log("Magnituda: " + this.magnituda.value);
+            console.log("S/N: " + this.signal_to_noise.value);
+          },
+
+          bindEvent: function(event, target, callback) {
+            target.addEventListener(event, callback);
+          }
+
+        }
+
+        // inicijalizacija
+        kalkulator.init();
+
+      });
+  
+    </script>
+    
+  </body>
+
+</html>
