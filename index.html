@@ -18,12 +18,34 @@
   }
 
   .wrapper {
-    width: 700px;
-    margin: 100px auto;
+    max-width: 1300px;
+    min-width: 1100px;
+    margin: 30px auto;
+  }
+
+  .form,
+  .result {
+    width: 48%;
+    display: inline-block;
+  }
+
+  .result {
+    vertical-align: top;
+    float: right;
+  }
+
+  .result p {
+    margin: 6px 0 6px 20px;
+  }
+
+  #canvas {
+    display: block;
+    /*border: 1px solid #333;*/
+    margin: 15px auto 0;
   }
 
   fieldset {
-    padding: 60px;
+    padding: 30px 40px;
   }
 
   legend {
@@ -31,8 +53,7 @@
   }
 
   .collapsed {
-    overflow: hidden;
-    height: 0;
+    /*display: none;*/
   }
 
   .parameters {
@@ -55,8 +76,7 @@
     width: 39%;
   }
 
-  .submit,
-  .back {
+  .submit {
     display: block;
     margin: 30px auto 0;
     border: none;
@@ -65,13 +85,18 @@
     background-color: #bbb;
   }
 
-  .back {
-    margin-top: 0;
+  .submit:hover {
+    background-color: #999;
   }
 
-  .submit:hover,
-  .back:hover {
-    background-color: #999;
+  .bold {
+    font-weight: 700;
+  }
+
+  .ekspozicija,
+  .ekspozicija span {
+    font-size: 18px;
+    text-align: center;
   }
 
   </style>
@@ -157,7 +182,19 @@
 
           <div class="result collapsed">
 
-            <input type="button" class="back" value="&#8592; Nazad">
+            <p>Teleskop: <span class="r-teleskop bold"></span></p>
+            <p>CCD: <span class="r-ccd bold"></span></p>
+            <p>Filter: <span class="r-filter bold"></span></p>
+            <p>Opseg filtera: <span class="r-opseg bold"></span></p>
+            <p>Ukupna transparentnost na svim optičkim elementima: <span class="r-transparentnost bold"></span></p>
+            <p>Transparentnost neba: <span class="r-transparentnost-neba bold"></span></p>
+            <p>Sjaj neba: <span class="r-sjaj-neba bold"></span></p>
+            <p>Magnituda: <span class="r-magnituda bold"></span></p>
+            <p>S/N: <span class="r-signal-to-noise bold"></span></p>
+
+            <p class="ekspozicija bold">Ekspozicija: t = <span>0</span>s</p>
+
+            <canvas id="canvas" width="520" height="400"></canvas> 
 
           </div>
         </fieldset>
@@ -172,10 +209,14 @@
 
         var kalkulator = {
 
+          broj_podeokaX: 0,
+          broj_podeokaY: 0,
+          podeokX: 45,
+          podeokY: 45,
+
           init: function() {
             this.cacheDom();
             this.bindEvent('click', this.submit, this.execute.bind(this));
-            this.bindEvent('click', this.back, this.goBack.bind(this));
           },
 
           cacheDom: function() {
@@ -189,21 +230,117 @@
             this.magnituda = document.querySelector('.magnituda');
             this.signal_to_noise = document.querySelector('.signal-to-noise');
 
+            this.r_teleskop = document.querySelector('.r-teleskop');
+            this.r_ccd = document.querySelector('.r-ccd');
+            this.r_filter = document.querySelector('.r-filter');
+            this.r_opseg_filtera = document.querySelector('.r-opseg');
+            this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
+            this.r_transparentnost_neba = document.querySelector('.r-transparentnost-neba');
+            this.r_sjaj_neba = document.querySelector('.r-sjaj-neba');
+            this.r_magnituda = document.querySelector('.r-magnituda');
+            this.r_signal_to_noise = document.querySelector('.r-signal-to-noise');
+
+            this.ekspozicija = document.querySelector('.ekspozicija span');
+            this.canvas = document.querySelector('#canvas');
+
             this.submit = document.querySelector('.submit');
-            this.back = document.querySelector('.back');
             this.form = document.querySelector('.form');
             this.result = document.querySelector('.result');
           },
 
           execute: function() {
             this.logger();
-            this.form.classList.add("collapsed");            
+            this.fillData();
+            this.drawGraphLines();
+            this.addGraphValues();
             this.result.classList.remove("collapsed");
           },
 
-          goBack: function() {
-            this.form.classList.remove("collapsed");            
-            this.result.classList.add("collapsed");
+          fillData: function() {
+            this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
+            this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
+            this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
+            this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
+            this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
+            this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
+            this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
+            this.r_magnituda.innerHTML = this.magnituda.value;
+            this.r_signal_to_noise.innerHTML = this.signal_to_noise.value;
+
+          },
+
+          drawGraphLines: function() {
+            var ctx = this.canvas.getContext("2d");
+            var width = this.canvas.width;
+            var height = this.canvas.height;
+
+            ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+            this.broj_podeokaX = 0;
+            this.broj_podeokaY = 0;
+
+            // koordinatne linije
+            // x-osa
+            ctx.moveTo(15,height-25);
+            ctx.lineTo(width-15,height-25);
+            // y-osa
+            ctx.moveTo(25,height-15);
+            ctx.lineTo(25,22);
+
+            // podeoci na x osi
+            for (var i = 25 + this.podeokX; i < width; i += this.podeokX) {
+              ctx.moveTo(i,height-25);
+              ctx.lineTo(i,height-15);
+              this.broj_podeokaX++;
+            }
+
+            // podeoci na y osi
+            for (var j = height - 25 - this.podeokY; j > 20; j -= this.podeokY) {
+              ctx.moveTo(25,j);
+              ctx.lineTo(15,j);
+              this.broj_podeokaY++;
+            }
+
+            ctx.stroke();
+
+            // oznake koordinatnih osa
+            ctx.font = "16px sans-serif";
+            ctx.fillText("S/N",15,15);
+            ctx.fillText("t",width-10,height-20);
+
+            // koordinatni početak
+            ctx.font = "10px sans-serif";
+            ctx.fillText("0",5,height-20);
+            ctx.fillText("0",21,height-3);
+          },
+
+          addGraphValues: function() {
+            var ctx = this.canvas.getContext("2d");
+            var height = this.canvas.height;
+
+            var m = 1;
+            var sn = Math.ceil(this.signal_to_noise.value);
+            var upLimitY = Math.ceil(sn*1.3);
+
+            ctx.font = "10px sans-serif";
+
+            if (upLimitY > this.broj_podeokaY) {
+              while (upLimitY%this.broj_podeokaY !== 0) {
+                upLimitY++;
+              }
+              for (var j = height - 25 - this.podeokY; j > 20; j -= this.podeokY) {
+                ctx.moveTo(0,j);
+                ctx.fillText(m*upLimitY/this.broj_podeokaY,0,j+10);
+                m++;
+              }
+            } else {
+              upLimitY = Math.ceil(sn*1.3);
+              for (var j = height - 25 - this.podeokY; j > 20; j -= this.podeokY) {
+                ctx.moveTo(0,j);
+                ctx.fillText((m*upLimitY/this.broj_podeokaY).toFixed(2),0,j+10);
+                m++;
+              }
+            }
+
           },
 
           logger: function() {
