@@ -19,13 +19,17 @@
 
   .wrapper {
     max-width: 1300px;
-    min-width: 1100px;
+    min-width: 1120px;
     margin: 30px auto;
   }
 
-  .form,
+  .form {
+    width: 43%;
+    display: inline-block;
+  }
+
   .result {
-    width: 48%;
+    width: 55%;
     display: inline-block;
   }
 
@@ -113,19 +117,19 @@
             <div class="parameters">
               <label for="teleskop">Teleskop:</label>
               <select class="teleskop" name="teleskop">
-                <option value="60cm Cassegrain">60cm Cassegrain</option>
-                <option value="1.4m Nasmyth">1.4m Nasmyth</option>
+                <option value="cassegrain">60cm Cassegrain</option>
+                <option value="nasmyth">1.4m Nasmyth</option>
               </select>
             </div>
 
             <div class="parameters">
               <label for="ccd">CCD:</label>
               <select class="ccd" name="ccd">
-                <option value="ANDOR iKonL">ANDOR iKonL</option>
-                <option value="ANDOR iXon 897">ANDOR iXon 897</option>
-                <option value="Apogee U42">Apogee U42</option>
-                <option value="Apogee E47">Apogee E47</option>
-                <option value="SBIG ST10XME">SBIG ST10XME</option>
+                <option value="iKonL">ANDOR iKonL</option>
+                <option value="iXon897">ANDOR iXon 897</option>
+                <option value="apogeeU42">Apogee U42</option>
+                <option value="apogeeE47">Apogee E47</option>
+                <option value="sbigst10xme">SBIG ST10XME</option>
               </select>
             </div>
 
@@ -194,7 +198,7 @@
 
             <p class="ekspozicija bold">Ekspozicija: t = <span>0</span>s</p>
 
-            <canvas id="canvas" width="520" height="400"></canvas> 
+            <canvas id="canvas" width="550" height="400"></canvas>
 
           </div>
         </fieldset>
@@ -209,10 +213,51 @@
 
         var kalkulator = {
 
+          xOffset: 25,
+          yOffset: 20,
+          upLimitX: 0,
+          upLimitY: 0,
           broj_podeokaX: 0,
           broj_podeokaY: 0,
           podeokX: 45,
           podeokY: 45,
+          time: 50,
+          eqParams: {
+            sig: 0,
+            sky: 0,
+            dc: 0,
+            rn: 0
+          },
+          telescope: {
+            cassegrain: {
+              diameter: 60
+            },
+            nasmyth: {
+              diameter: 140
+            }
+          },
+          camera: {
+            apogeeU42: {
+              dc: 1,
+              rn: 10
+            },
+            apogeeE47: {
+              dc: 0.1,
+              rn: 10
+            },
+            iKonL: {
+              dc: null,
+              rn: null
+            },
+            iXon897: {
+              dc: null,
+              rn: null
+            },
+            sbigst10xme: {
+              dc: null,
+              rn: null
+            }
+          },
 
           init: function() {
             this.cacheDom();
@@ -249,10 +294,13 @@
           },
 
           execute: function() {
-            this.logger();
+            // this.logger();
             this.fillData();
+            this.calculateExposure();
+            this.resetGraph();
             this.drawGraphLines();
             this.addGraphValues();
+            this.drawGraph();
             this.result.classList.remove("collapsed");
           },
 
@@ -266,7 +314,55 @@
             this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
             this.r_magnituda.innerHTML = this.magnituda.value;
             this.r_signal_to_noise.innerHTML = this.signal_to_noise.value;
+          },
 
+          calculateExposure: function() {
+            // signal
+            this.eqParams.sig = 2;
+            var sig = this.eqParams.sig;
+            // sky
+            this.eqParams.sky = 4;
+            var sky = this.eqParams.sky;
+            // dark current
+            this.eqParams.dc = this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc;
+            var dc = this.eqParams.dc;
+            // read-out noise
+            this.eqParams.rn = this.camera[this.ccd.options[this.ccd.selectedIndex].value].rn;
+            var rn = this.eqParams.rn;
+            // number of pixels
+            this.eqParams.n = 20;
+            var n = this.eqParams.n;
+            // signal-to-moise ratio
+            var snr = this.signal_to_noise.value;
+
+            // console.log("Sig: " + sig + "\n" +
+            //             "Sky: " + sky + "\n" +
+            //             "dc: " + dc + "\n" +
+            //             "rn: " + rn + "\n" +
+            //             "n: " + n + "\n" +
+            //             "snr: " + snr + "\n");
+
+            this.time = Math.round((Math.pow(snr,2)*(sig+sky+dc*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+sky+dc*n),2)+4*Math.pow(sig*snr,2)*rn*n))/(2*Math.pow(sig,2)));
+            this.ekspozicija.innerHTML = this.time;
+
+          },
+
+          setXOffset: function(sn) {
+            var ctx = this.canvas.getContext("2d");
+            var txt = sn.toString();
+            var txtWidth= ctx.measureText(txt).width;
+
+            this.xOffset = txtWidth + 5 < 20? 25: txtWidth + 5;
+          },
+
+          resetGraph: function() {
+            var ctx = this.canvas.getContext("2d");
+            var height = this.canvas.height;
+            var width = this.canvas.width;
+
+            ctx.setTransform(1,0,0,1,0,0);
+
+            ctx.clearRect(0,0,width,height);
           },
 
           drawGraphLines: function() {
@@ -274,78 +370,151 @@
             var width = this.canvas.width;
             var height = this.canvas.height;
 
-            ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+            this.setXOffset(Math.ceil(this.signal_to_noise.value*1.3));
+
+            ctx.setTransform(1,0,0,-1,0,height);
+
             this.broj_podeokaX = 0;
             this.broj_podeokaY = 0;
 
+            // jako bitno da bi kasnije mogli da obrišemo linije nacrtane lineTo() metodom
+            ctx.beginPath();
+
             // koordinatne linije
             // x-osa
-            ctx.moveTo(15,height-25);
-            ctx.lineTo(width-15,height-25);
+            ctx.moveTo(this.xOffset,this.yOffset + 10);
+            ctx.lineTo(width - 30,this.yOffset + 10);
             // y-osa
-            ctx.moveTo(25,height-15);
-            ctx.lineTo(25,22);
+            ctx.moveTo(this.xOffset + 10,this.yOffset);
+            ctx.lineTo(this.xOffset + 10,height - 20);
 
             // podeoci na x osi
-            for (var i = 25 + this.podeokX; i < width; i += this.podeokX) {
-              ctx.moveTo(i,height-25);
-              ctx.lineTo(i,height-15);
+            for (var i = this.xOffset + 10 + this.podeokX; i <= width - 30; i += this.podeokX) {
+              ctx.moveTo(i,this.yOffset+10);
+              ctx.lineTo(i,this.yOffset);
               this.broj_podeokaX++;
             }
 
             // podeoci na y osi
-            for (var j = height - 25 - this.podeokY; j > 20; j -= this.podeokY) {
-              ctx.moveTo(25,j);
-              ctx.lineTo(15,j);
+            for (var j = this.yOffset + 10 + this.podeokY; j <= height - 20; j += this.podeokY) {
+              ctx.moveTo(this.xOffset+10,j);
+              ctx.lineTo(this.xOffset,j);
               this.broj_podeokaY++;
             }
 
             ctx.stroke();
 
-            // oznake koordinatnih osa
-            ctx.font = "16px sans-serif";
-            ctx.fillText("S/N",15,15);
-            ctx.fillText("t",width-10,height-20);
-
-            // koordinatni početak
-            ctx.font = "10px sans-serif";
-            ctx.fillText("0",5,height-20);
-            ctx.fillText("0",21,height-3);
+            ctx.closePath();
           },
 
           addGraphValues: function() {
             var ctx = this.canvas.getContext("2d");
             var height = this.canvas.height;
+            var width = this.canvas.width;
 
+            var n = 1;
             var m = 1;
-            var sn = Math.ceil(this.signal_to_noise.value);
-            var upLimitY = Math.ceil(sn*1.3);
+            var t = this.time;
+            var sn = this.signal_to_noise.value;
 
+            this.upLimitX = Math.ceil(t*1.3);
+            this.upLimitY = Math.ceil(sn*1.3);
+
+            ctx.setTransform(1,0,0,1,0,0);
+
+            // oznake koordinatnih osa
+            ctx.font = "16px sans-serif";
+            ctx.fillText("S/N",this.xOffset,15);
+            ctx.fillText("t(s)",width-25,height-this.yOffset-5);
+
+            // koordinatni početak
             ctx.font = "10px sans-serif";
+            ctx.fillText("0",3,height-this.yOffset-5); // y-osa
+            ctx.fillText("0",this.xOffset+7,height-this.yOffset+15); // x-osa
 
-            if (upLimitY > this.broj_podeokaY) {
-              while (upLimitY%this.broj_podeokaY !== 0) {
-                upLimitY++;
+            // vrednosti na x osi
+            if (this.upLimitX > this.broj_podeokaX) {
+              while (this.upLimitX%this.broj_podeokaX !== 0) {
+                this.upLimitX++;
               }
-              for (var j = height - 25 - this.podeokY; j > 20; j -= this.podeokY) {
+              for (let j = this.xOffset + 10 + this.podeokX; j < width - 20; j += this.podeokX) {
+                ctx.moveTo(j,height-3);
+                ctx.fillText(n*this.upLimitX/this.broj_podeokaX,j-5,height-this.yOffset+15);
+                n++;
+              }
+            } else {
+              for (let j = this.xOffset + 10 + this.podeokX; j < width - 20; j += this.podeokX) {
+                ctx.moveTo(j,height-3);
+                ctx.fillText((n*this.upLimitX/this.broj_podeokaX).toFixed(2),j-5,height-this.yOffset+15);
+                n++;
+              }
+            }
+
+            // vrednosti na y osi
+            if (this.upLimitY > this.broj_podeokaY) {
+              while (this.upLimitY%this.broj_podeokaY !== 0) {
+                this.upLimitY++;
+              }
+              for (let j = height - 15 - this.yOffset - this.podeokY; j > 20; j -= this.podeokY) {
                 ctx.moveTo(0,j);
-                ctx.fillText(m*upLimitY/this.broj_podeokaY,0,j+10);
+                ctx.fillText(m*this.upLimitY/this.broj_podeokaY,3,j+10);
                 m++;
               }
             } else {
-              upLimitY = Math.ceil(sn*1.3);
-              for (var j = height - 25 - this.podeokY; j > 20; j -= this.podeokY) {
+              for (let j = height - 15 - this.yOffset - this.podeokY; j > 20; j -= this.podeokY) {
                 ctx.moveTo(0,j);
-                ctx.fillText((m*upLimitY/this.broj_podeokaY).toFixed(2),0,j+10);
+                ctx.fillText((m*this.upLimitY/this.broj_podeokaY).toFixed(2),3,j+10);
                 m++;
               }
             }
+          },
+
+          drawGraph: function() {
+            var ctx = this.canvas.getContext("2d");
+            var height = this.canvas.height;
+            var width = this.canvas.width;
+
+            var scaleX = this.podeokX*this.broj_podeokaX/this.upLimitX;
+            var scaleY = this.podeokY*this.broj_podeokaY/this.upLimitY;
+
+            var sig = this.eqParams.sig;
+            var sky = this.eqParams.sky;
+            var dc = this.eqParams.dc;
+            var rn = this.eqParams.rn;
+            var n = this.eqParams.n;
+
+            var snr = 0;
+
+            ctx.setTransform(1,0,0,-1,this.xOffset+11,height-this.yOffset-11);
+            ctx.beginPath();
+
+            ctx.moveTo(0,0);
+
+            if (this.time < 3) {
+              for (let t = 0; t <= this.upLimitX; t+=0.2) {
+                snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
+                ctx.lineTo(t*scaleX,snr*scaleY);
+              }
+            } else if (this.time < 10) {
+              for (let t = 0; t <= this.upLimitX; t+=0.5) {
+                snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
+                ctx.lineTo(t*scaleX,snr*scaleY);
+              }
+            } else {
+              for (let t = 0; t <= this.upLimitX; t++) {
+                snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
+                ctx.lineTo(t*scaleX,snr*scaleY);
+              }
+            }
+
+            ctx.stroke();
+            ctx.closePath();
 
           },
 
           logger: function() {
-            console.log("Teleskop: " + this.teleskop.options[this.teleskop.selectedIndex].text);
-            console.log("CCD: " + this.ccd.options[this.ccd.selectedIndex].text);
+            console.log("Teleskop: " + this.teleskop.options[this.teleskop.selectedIndex].value);
+            console.log("CCD: " + this.ccd.options[this.ccd.selectedIndex].value);
             console.log("Filter: " + this.filter.options[this.filter.selectedIndex].text);
             console.log("Opseg filtera: " + this.opseg_filtera.value);
             console.log("Transparentnost elemenata: " + this.transparentnost_elemenata.value);
@@ -353,6 +522,9 @@
             console.log("Sjaj neba: " + this.sjaj_neba.value);
             console.log("Magnituda: " + this.magnituda.value);
             console.log("S/N: " + this.signal_to_noise.value);
+            console.log("Telescope diameter: " + this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter);
+            console.log("Camera dark current: " + this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc);
+            console.log("Camera read noise: " + this.camera[this.ccd.options[this.ccd.selectedIndex].value].rn);
           },
 
           bindEvent: function(event, target, callback) {
@@ -365,7 +537,7 @@
         kalkulator.init();
 
       });
-  
+
     </script>
     
   </body>
