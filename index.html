@@ -219,9 +219,10 @@
           upLimitY: 0,
           broj_podeokaX: 0,
           broj_podeokaY: 0,
+          dataPointsNo: 200,
           podeokX: 45,
           podeokY: 45,
-          time: 50,
+          time: 0,
           eqParams: {
             sig: 0,
             sky: 0,
@@ -342,7 +343,13 @@
             //             "n: " + n + "\n" +
             //             "snr: " + snr + "\n");
 
-            this.time = Math.round((Math.pow(snr,2)*(sig+sky+dc*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+sky+dc*n),2)+4*Math.pow(sig*snr,2)*rn*n))/(2*Math.pow(sig,2)));
+            this.time = ((Math.pow(snr,2)*(sig+sky+dc*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+sky+dc*n),2)+4*Math.pow(sig*snr,2)*rn*n))/(2*Math.pow(sig,2))).toFixed(2);
+
+            // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
+            if (this.time > 20) {
+              this.time = Math.round(this.time);
+            }
+
             this.ekspozicija.innerHTML = this.time;
 
           },
@@ -490,18 +497,8 @@
 
             ctx.moveTo(0,0);
 
-            if (this.time < 3) {
-              for (let t = 0; t <= this.upLimitX; t+=0.2) {
-                snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
-                ctx.lineTo(t*scaleX,snr*scaleY);
-              }
-            } else if (this.time < 10) {
-              for (let t = 0; t <= this.upLimitX; t+=0.5) {
-                snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
-                ctx.lineTo(t*scaleX,snr*scaleY);
-              }
-            } else {
-              for (let t = 0; t <= this.upLimitX; t++) {
+            if (this.upLimitX !== 0) {
+              for (let t = 0; t <= this.upLimitX; t+= this.upLimitX/this.dataPointsNo) {
                 snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
                 ctx.lineTo(t*scaleX,snr*scaleY);
               }
