@@ -4,106 +4,10 @@
     
   <head>
     <meta charset="UTF-8" />
-      <title>Kalkulator ekspozicije</title>
-<!--       <link rel="stylesheet" type="text/css" href="style.css">
-      <script type="text/javascript" src="script.js"></script> -->
+      <title>Exposure time calculator</title>
+      <link rel="stylesheet" type="text/css" href="build/main.css">
+      <script type="text/javascript" src="build/main.js"></script>
   </head>
-
-  <style>
-
-  * {
-    font-size: 14px;
-    font-family: sans-serif;
-    box-sizing: border-box;
-  }
-
-  .wrapper {
-    max-width: 1300px;
-    min-width: 1120px;
-    margin: 30px auto;
-  }
-
-  .form {
-    width: 43%;
-    display: inline-block;
-  }
-
-  .result {
-    width: 55%;
-    display: inline-block;
-  }
-
-  .result {
-    vertical-align: top;
-    float: right;
-  }
-
-  .result p {
-    margin: 6px 0 6px 20px;
-  }
-
-  #canvas {
-    display: block;
-    /*border: 1px solid #333;*/
-    margin: 15px auto 0;
-  }
-
-  fieldset {
-    padding: 30px 40px;
-  }
-
-  legend {
-    font-size: 24px;
-  }
-
-  .collapsed {
-    /*display: none;*/
-  }
-
-  .parameters {
-    position: relative;
-    padding: 10px 20px;
-  }
-
-  .parameters:nth-child(odd) {
-    background-color: #cde; 
-  }
-
-  label {
-    display: inline-block;
-    width: 60%;
-    vertical-align: middle;
-    padding-right: 20px;
-  }
-
-  label + * {
-    width: 39%;
-  }
-
-  .submit {
-    display: block;
-    margin: 30px auto 0;
-    border: none;
-    height: 40px;
-    width: 140px;
-    background-color: #bbb;
-  }
-
-  .submit:hover {
-    background-color: #999;
-  }
-
-  .bold {
-    font-weight: 700;
-  }
-
-  .ekspozicija,
-  .ekspozicija span {
-    font-size: 18px;
-    text-align: center;
-  }
-
-  </style>
     
   <body>
 
@@ -111,11 +15,11 @@
             
       <form>
         <fieldset>
-          <legend>Kalkulator ekspozicije</legend>
+          <legend>Exposure time calculator</legend>
 
           <div class="form">
             <div class="parameters">
-              <label for="teleskop">Teleskop:</label>
+              <label for="teleskop">Telescope:</label>
               <select class="teleskop" name="teleskop">
                 <option value="cassegrain">60cm Cassegrain</option>
                 <option value="nasmyth">1.4m Nasmyth</option>
@@ -123,18 +27,26 @@
             </div>
 
             <div class="parameters">
-              <label for="ccd">CCD:</label>
-              <select class="ccd" name="ccd">
-                <option value="iKonL">ANDOR iKonL</option>
-                <option value="iXon897">ANDOR iXon 897</option>
-                <option value="apogeeU42">Apogee U42</option>
-                <option value="apogeeE47">Apogee E47</option>
-                <option value="sbigst10xme">SBIG ST10XME</option>
+              <label for="reducer">Reducer:</label>
+              <select class="reducer" name="reducer">
+                <option value="1">none</option>
+                <option value="0.5">0.5x</option>
               </select>
             </div>
 
             <div class="parameters">
-              <label for="filter">Filter:</label>
+              <label for="ccd">CCD:</label>
+              <select class="ccd" name="ccd">
+                <option value="iKonL" disabled="disabled">ANDOR iKonL</option>
+                <option value="iXon897" disabled="disabled">ANDOR iXon 897</option>
+                <option value="apogeeU42">Apogee U42</option>
+                <option value="apogeeE47" disabled="disabled">Apogee E47</option>
+                <option value="sbigst10xme" disabled="disabled">SBIG ST10XME</option>
+              </select>
+            </div>
+
+            <div class="parameters">
+              <label for="filter">Band:</label>
               <select class="filter" name="filter">
                 <option value="B">B</option>
                 <option value="V">V</option>
@@ -148,7 +60,7 @@
             </div>
 
             <div class="parameters">
-              <label for="opseg">Opseg filtera:</label>
+              <label for="opseg">Bandwidth (&#8491;):</label>
               <input class="opseg" type="text" list="opseg">
               <datalist id="opseg">
                 <option value="400">400</option>
@@ -157,22 +69,27 @@
             </div>
 
             <div class="parameters">
-              <label for="transparentnost">Ukupna transparentnost na svim optičkim elementima:</label>
+              <label for="transparentnost">Total transparency on all optical elements:</label>
               <input class="transparentnost" type="text">
             </div>
 
             <div class="parameters">
-              <label for="transparentnost-neba">Transparentnost neba:</label>
+              <label for="transparentnost-neba">Sky transparency:</label>
               <input class="transparentnost-neba" type="text">
             </div>
 
             <div class="parameters">
-              <label for="sjaj-neba">Sjaj neba:</label>
-              <input class="sjaj-neba" type="text">
+              <label for="sjaj-neba">Sky brightness (mag/arcsec<sup>2</sup>):</label>
+              <input class="sjaj-neba" type="text" value="19">
             </div>
 
             <div class="parameters">
-              <label for="magnituda">Magnituda:</label>
+              <label for="seeing">Seeing (FWHM in arcsec):</label>
+              <input class="seeing" type="text">
+            </div>
+
+            <div class="parameters">
+              <label for="magnituda">Magnitude:</label>
               <input class="magnituda" type="text">
             </div>
 
@@ -181,22 +98,24 @@
               <input class="signal-to-noise" type="text">
             </div>
           
-            <input type="button" class="submit" value="Računaj">
+            <input type="button" class="submit" value="Calculate">
           </div>
 
           <div class="result collapsed">
 
-            <p>Teleskop: <span class="r-teleskop bold"></span></p>
+            <p>Telescope: <span class="r-teleskop bold"></span></p>
+            <p>Reducer: <span class="r-reducer bold"></span></p>
             <p>CCD: <span class="r-ccd bold"></span></p>
-            <p>Filter: <span class="r-filter bold"></span></p>
-            <p>Opseg filtera: <span class="r-opseg bold"></span></p>
-            <p>Ukupna transparentnost na svim optičkim elementima: <span class="r-transparentnost bold"></span></p>
-            <p>Transparentnost neba: <span class="r-transparentnost-neba bold"></span></p>
-            <p>Sjaj neba: <span class="r-sjaj-neba bold"></span></p>
-            <p>Magnituda: <span class="r-magnituda bold"></span></p>
+            <p>Band: <span class="r-filter bold"></span></p>
+            <p>Bandwidth (&#8491;): <span class="r-opseg bold"></span></p>
+            <p>Total transparency on all optical elements: <span class="r-transparentnost bold"></span></p>
+            <p>Sky transparency: <span class="r-transparentnost-neba bold"></span></p>
+            <p>Sky brightness (mag/arcsec<sup>2</sup>): <span class="r-sjaj-neba bold"></span></p>
+            <p>Seeing (FWHM in arcsec): <span class="r-seeing bold"></span></p>
+            <p>Magnitude: <span class="r-magnituda bold"></span></p>
             <p>S/N: <span class="r-signal-to-noise bold"></span></p>
 
-            <p class="ekspozicija bold">Ekspozicija: t = <span>0</span>s</p>
+            <p class="ekspozicija bold">Exposure time: t = <span>0</span>s</p>
 
             <canvas id="canvas" width="550" height="400"></canvas>
 
@@ -206,336 +125,6 @@
       </form>
 
     </div>
-
-    <script>
-
-      window.addEventListener('load', function() {
-
-        var kalkulator = {
-
-          xOffset: 25,
-          yOffset: 20,
-          upLimitX: 0,
-          upLimitY: 0,
-          broj_podeokaX: 0,
-          broj_podeokaY: 0,
-          dataPointsNo: 200,
-          podeokX: 45,
-          podeokY: 45,
-          time: 0,
-          eqParams: {
-            sig: 0,
-            sky: 0,
-            dc: 0,
-            rn: 0
-          },
-          telescope: {
-            cassegrain: {
-              diameter: 60
-            },
-            nasmyth: {
-              diameter: 140
-            }
-          },
-          camera: {
-            apogeeU42: {
-              dc: 1,
-              rn: 10
-            },
-            apogeeE47: {
-              dc: 0.1,
-              rn: 10
-            },
-            iKonL: {
-              dc: null,
-              rn: null
-            },
-            iXon897: {
-              dc: null,
-              rn: null
-            },
-            sbigst10xme: {
-              dc: null,
-              rn: null
-            }
-          },
-
-          init: function() {
-            this.cacheDom();
-            this.bindEvent('click', this.submit, this.execute.bind(this));
-          },
-
-          cacheDom: function() {
-            this.teleskop = document.querySelector('.teleskop');
-            this.ccd = document.querySelector('.ccd');
-            this.filter = document.querySelector('.filter');
-            this.opseg_filtera = document.querySelector('.opseg');
-            this.transparentnost_elemenata = document.querySelector('.transparentnost');
-            this.transparentnost_neba = document.querySelector('.transparentnost-neba');
-            this.sjaj_neba = document.querySelector('.sjaj-neba');
-            this.magnituda = document.querySelector('.magnituda');
-            this.signal_to_noise = document.querySelector('.signal-to-noise');
-
-            this.r_teleskop = document.querySelector('.r-teleskop');
-            this.r_ccd = document.querySelector('.r-ccd');
-            this.r_filter = document.querySelector('.r-filter');
-            this.r_opseg_filtera = document.querySelector('.r-opseg');
-            this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
-            this.r_transparentnost_neba = document.querySelector('.r-transparentnost-neba');
-            this.r_sjaj_neba = document.querySelector('.r-sjaj-neba');
-            this.r_magnituda = document.querySelector('.r-magnituda');
-            this.r_signal_to_noise = document.querySelector('.r-signal-to-noise');
-
-            this.ekspozicija = document.querySelector('.ekspozicija span');
-            this.canvas = document.querySelector('#canvas');
-
-            this.submit = document.querySelector('.submit');
-            this.form = document.querySelector('.form');
-            this.result = document.querySelector('.result');
-          },
-
-          execute: function() {
-            // this.logger();
-            this.fillData();
-            this.calculateExposure();
-            this.resetGraph();
-            this.drawGraphLines();
-            this.addGraphValues();
-            this.drawGraph();
-            this.result.classList.remove("collapsed");
-          },
-
-          fillData: function() {
-            this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
-            this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
-            this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
-            this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
-            this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
-            this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
-            this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
-            this.r_magnituda.innerHTML = this.magnituda.value;
-            this.r_signal_to_noise.innerHTML = this.signal_to_noise.value;
-          },
-
-          calculateExposure: function() {
-            // signal
-            this.eqParams.sig = 2;
-            var sig = this.eqParams.sig;
-            // sky
-            this.eqParams.sky = 4;
-            var sky = this.eqParams.sky;
-            // dark current
-            this.eqParams.dc = this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc;
-            var dc = this.eqParams.dc;
-            // read-out noise
-            this.eqParams.rn = this.camera[this.ccd.options[this.ccd.selectedIndex].value].rn;
-            var rn = this.eqParams.rn;
-            // number of pixels
-            this.eqParams.n = 20;
-            var n = this.eqParams.n;
-            // signal-to-moise ratio
-            var snr = this.signal_to_noise.value;
-
-            // console.log("Sig: " + sig + "\n" +
-            //             "Sky: " + sky + "\n" +
-            //             "dc: " + dc + "\n" +
-            //             "rn: " + rn + "\n" +
-            //             "n: " + n + "\n" +
-            //             "snr: " + snr + "\n");
-
-            this.time = ((Math.pow(snr,2)*(sig+sky+dc*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+sky+dc*n),2)+4*Math.pow(sig*snr,2)*rn*n))/(2*Math.pow(sig,2))).toFixed(2);
-
-            // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
-            if (this.time > 20) {
-              this.time = Math.round(this.time);
-            }
-
-            this.ekspozicija.innerHTML = this.time;
-
-          },
-
-          setXOffset: function(sn) {
-            var ctx = this.canvas.getContext("2d");
-            var txt = sn.toString();
-            var txtWidth= ctx.measureText(txt).width;
-
-            this.xOffset = txtWidth + 5 < 20? 25: txtWidth + 5;
-          },
-
-          resetGraph: function() {
-            var ctx = this.canvas.getContext("2d");
-            var height = this.canvas.height;
-            var width = this.canvas.width;
-
-            ctx.setTransform(1,0,0,1,0,0);
-
-            ctx.clearRect(0,0,width,height);
-          },
-
-          drawGraphLines: function() {
-            var ctx = this.canvas.getContext("2d");
-            var width = this.canvas.width;
-            var height = this.canvas.height;
-
-            this.setXOffset(Math.ceil(this.signal_to_noise.value*1.3));
-
-            ctx.setTransform(1,0,0,-1,0,height);
-
-            this.broj_podeokaX = 0;
-            this.broj_podeokaY = 0;
-
-            // jako bitno da bi kasnije mogli da obrišemo linije nacrtane lineTo() metodom
-            ctx.beginPath();
-
-            // koordinatne linije
-            // x-osa
-            ctx.moveTo(this.xOffset,this.yOffset + 10);
-            ctx.lineTo(width - 30,this.yOffset + 10);
-            // y-osa
-            ctx.moveTo(this.xOffset + 10,this.yOffset);
-            ctx.lineTo(this.xOffset + 10,height - 20);
-
-            // podeoci na x osi
-            for (var i = this.xOffset + 10 + this.podeokX; i <= width - 30; i += this.podeokX) {
-              ctx.moveTo(i,this.yOffset+10);
-              ctx.lineTo(i,this.yOffset);
-              this.broj_podeokaX++;
-            }
-
-            // podeoci na y osi
-            for (var j = this.yOffset + 10 + this.podeokY; j <= height - 20; j += this.podeokY) {
-              ctx.moveTo(this.xOffset+10,j);
-              ctx.lineTo(this.xOffset,j);
-              this.broj_podeokaY++;
-            }
-
-            ctx.stroke();
-
-            ctx.closePath();
-          },
-
-          addGraphValues: function() {
-            var ctx = this.canvas.getContext("2d");
-            var height = this.canvas.height;
-            var width = this.canvas.width;
-
-            var n = 1;
-            var m = 1;
-            var t = this.time;
-            var sn = this.signal_to_noise.value;
-
-            this.upLimitX = Math.ceil(t*1.3);
-            this.upLimitY = Math.ceil(sn*1.3);
-
-            ctx.setTransform(1,0,0,1,0,0);
-
-            // oznake koordinatnih osa
-            ctx.font = "16px sans-serif";
-            ctx.fillText("S/N",this.xOffset,15);
-            ctx.fillText("t(s)",width-25,height-this.yOffset-5);
-
-            // koordinatni početak
-            ctx.font = "10px sans-serif";
-            ctx.fillText("0",3,height-this.yOffset-5); // y-osa
-            ctx.fillText("0",this.xOffset+7,height-this.yOffset+15); // x-osa
-
-            // vrednosti na x osi
-            if (this.upLimitX > this.broj_podeokaX) {
-              while (this.upLimitX%this.broj_podeokaX !== 0) {
-                this.upLimitX++;
-              }
-              for (let j = this.xOffset + 10 + this.podeokX; j < width - 20; j += this.podeokX) {
-                ctx.moveTo(j,height-3);
-                ctx.fillText(n*this.upLimitX/this.broj_podeokaX,j-5,height-this.yOffset+15);
-                n++;
-              }
-            } else {
-              for (let j = this.xOffset + 10 + this.podeokX; j < width - 20; j += this.podeokX) {
-                ctx.moveTo(j,height-3);
-                ctx.fillText((n*this.upLimitX/this.broj_podeokaX).toFixed(2),j-5,height-this.yOffset+15);
-                n++;
-              }
-            }
-
-            // vrednosti na y osi
-            if (this.upLimitY > this.broj_podeokaY) {
-              while (this.upLimitY%this.broj_podeokaY !== 0) {
-                this.upLimitY++;
-              }
-              for (let j = height - 15 - this.yOffset - this.podeokY; j > 20; j -= this.podeokY) {
-                ctx.moveTo(0,j);
-                ctx.fillText(m*this.upLimitY/this.broj_podeokaY,3,j+10);
-                m++;
-              }
-            } else {
-              for (let j = height - 15 - this.yOffset - this.podeokY; j > 20; j -= this.podeokY) {
-                ctx.moveTo(0,j);
-                ctx.fillText((m*this.upLimitY/this.broj_podeokaY).toFixed(2),3,j+10);
-                m++;
-              }
-            }
-          },
-
-          drawGraph: function() {
-            var ctx = this.canvas.getContext("2d");
-            var height = this.canvas.height;
-            var width = this.canvas.width;
-
-            var scaleX = this.podeokX*this.broj_podeokaX/this.upLimitX;
-            var scaleY = this.podeokY*this.broj_podeokaY/this.upLimitY;
-
-            var sig = this.eqParams.sig;
-            var sky = this.eqParams.sky;
-            var dc = this.eqParams.dc;
-            var rn = this.eqParams.rn;
-            var n = this.eqParams.n;
-
-            var snr = 0;
-
-            ctx.setTransform(1,0,0,-1,this.xOffset+11,height-this.yOffset-11);
-            ctx.beginPath();
-
-            ctx.moveTo(0,0);
-
-            if (this.upLimitX !== 0) {
-              for (let t = 0; t <= this.upLimitX; t+= this.upLimitX/this.dataPointsNo) {
-                snr = sig*t/Math.sqrt(sig*t+sky*t+dc*t*n+rn*n);
-                ctx.lineTo(t*scaleX,snr*scaleY);
-              }
-            }
-
-            ctx.stroke();
-            ctx.closePath();
-
-          },
-
-          logger: function() {
-            console.log("Teleskop: " + this.teleskop.options[this.teleskop.selectedIndex].value);
-            console.log("CCD: " + this.ccd.options[this.ccd.selectedIndex].value);
-            console.log("Filter: " + this.filter.options[this.filter.selectedIndex].text);
-            console.log("Opseg filtera: " + this.opseg_filtera.value);
-            console.log("Transparentnost elemenata: " + this.transparentnost_elemenata.value);
-            console.log("Transparentnost neba: " + this.transparentnost_neba.value);
-            console.log("Sjaj neba: " + this.sjaj_neba.value);
-            console.log("Magnituda: " + this.magnituda.value);
-            console.log("S/N: " + this.signal_to_noise.value);
-            console.log("Telescope diameter: " + this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter);
-            console.log("Camera dark current: " + this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc);
-            console.log("Camera read noise: " + this.camera[this.ccd.options[this.ccd.selectedIndex].value].rn);
-          },
-
-          bindEvent: function(event, target, callback) {
-            target.addEventListener(event, callback);
-          }
-
-        }
-
-        // inicijalizacija
-        kalkulator.init();
-
-      });
-
-    </script>
     
   </body>
 

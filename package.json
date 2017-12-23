@@ -1,0 +1,25 @@
+{
+  "name": "kalkulator-ekspozicije",
+  "version": "1.0.0",
+  "description": "Live preview: https://svetislavoid.github.io/kalkulator-ekspozicije/",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Svetislavoid/kalkulator-ekspozicije.git"
+  },
+  "author": "Svetislav Grujić",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Svetislavoid/kalkulator-ekspozicije/issues"
+  },
+  "homepage": "https://github.com/Svetislavoid/kalkulator-ekspozicije#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^3.2.1",
+    "grunt-import-js": "^0.1.4"
+  }
+}

@@ -1,0 +1,91 @@
+* {
+    font-size: 14px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+  }
+
+  .wrapper {
+    max-width: 1300px;
+    min-width: 1120px;
+    margin: 30px auto;
+  }
+
+  .form {
+    width: 43%;
+    display: inline-block;
+  }
+
+  .result {
+    width: 55%;
+    display: inline-block;
+  }
+
+  .result {
+    vertical-align: top;
+    float: right;
+  }
+
+  .result p {
+    margin: 6px 0 6px 20px;
+  }
+
+  #canvas {
+    display: block;
+    /*border: 1px solid #333;*/
+    margin: 15px auto 0;
+  }
+
+  fieldset {
+    padding: 30px 40px;
+  }
+
+  legend {
+    font-size: 24px;
+  }
+
+  .collapsed {
+    /*display: none;*/
+  }
+
+  .parameters {
+    position: relative;
+    padding: 10px 20px;
+  }
+
+  .parameters:nth-child(odd) {
+    background-color: #cde; 
+  }
+
+  label {
+    display: inline-block;
+    width: 60%;
+    vertical-align: middle;
+    padding-right: 20px;
+  }
+
+  label + * {
+    width: 39%;
+  }
+
+  .submit {
+    display: block;
+    margin: 30px auto 0;
+    border: none;
+    height: 40px;
+    width: 140px;
+    background-color: #bbb;
+  }
+
+  .submit:hover {
+    background-color: #999;
+  }
+
+  .bold {
+    font-weight: 700;
+  }
+
+  .ekspozicija,
+  .ekspozicija span {
+    font-size: 18px;
+    text-align: center;
+  }
