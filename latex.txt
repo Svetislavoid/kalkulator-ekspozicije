@@ -1,0 +1,40 @@
+// Signal to noise equation
+  \begin{align*}
+  SNR &= \frac{S_{sig}t}{\sqrt{S_{sig} t+R_{sky}tn+S_{dc}tn+S_{ro}^{2}t}}
+  \end{align*}
+
+// exposure time
+  \begin{align*}
+  t &= \frac{SNR^{2}(S_{sig}+R_{sky}n+S_{dc}n)+\sqrt{SNR^{4}(S_{sig}+R_{sky}n+S_{dc}n)^{2}+4S_{sig}^{2}SNR^{2}S_{ro}^{2}n}}{2S_{sig}^{2}}
+  \end{align*}
+
+// number of pixels
+  \begin{align*}
+  n &= \frac{\pi(0,67*seeing[''])^{2}}{scale}
+  \end{align*}
+
+// scale
+  \begin{align*}
+  scale &= \frac{206265\cdot(pxSize[m])}{focalLength[m]}
+  \end{align*}
+
+// signal from the sky
+  \begin{align*}
+  R_{sky} = 10^{-\frac{mag_{s}}{2,5}} \cdot zeroMagnitudeFlux \\
+  \cdot skyTransparency \\
+  \cdot totalTransparency \\
+  \cdot telescopeArea \\
+  \cdot QE \\
+  \cdot bandwidth \\
+  \cdot scale
+  \end{align*}
+
+// signal from the object
+  \begin{align*}
+  S_{sig} = 10^{-\frac{mag}{2,5}} \cdot zeroMagnitudeFlux \\
+  \cdot skyTransparency \\
+  \cdot totalTransparency \\
+  \cdot telescopeArea \\
+  \cdot QE \\
+  \cdot bandwidth
+  \end{align*}

@@ -126,6 +126,42 @@
 
       </form>
 
+      <div class="report">
+        <div class="calculatedValues">
+          Vrednosti članova formule za SNR za odabrane parametre:
+          <ul>
+            <li>S<sub>sig</sub> = <span class="s_sig bold">0</span> e<sup>-</sup>/s</li>
+            <li>R<sub>sky</sub> = <span class="r_sky bold">0</span> e<sup>-</sup>/s/pix</li>
+            <li>S<sub>dc</sub> = <span class="s_dc bold">0</span> e<sup>-</sup>/s/pix</li>
+            <li>S<sub>ro</sub><sup>2</sup> = <span class="s_ro bold">0</span> e<sup>-</sup>/pix</li>
+            <li>n = <span class="n_pix bold">0</span> pix</li>
+          </ul>
+        </div>
+        <p>Iz izraza za SNR:</p>
+        <img src="img/snr.png">
+        <p>dobijamo izraz za vreme ekspozicije:</p>
+        <img src="img/exposure.png">
+        <p>Broj piksela dobijamo kao:</p>
+        <img src="img/pixelNo.png">
+        <p>gde je:</p>
+        <img src="img/scale.png">
+        <p>Signal sa neba dobijamo iz:</p>
+        <img src="img/skySignal.png">
+        <p>Signal sa objekta dobijamo iz:</p>
+        <img src="img/objectSignal.png">
+        <p>Ovde su:</p>
+        <ul>
+          <li>mag<sub>s</sub> - sjaj neba (Sky brightness (mag/arcsec<sup>2</sup>))</li>
+          <li>mag - magnituda posmatranog objekta (Magnitude)</li>
+          <li>zeroMagnitudeFlux - fluks nulte magnitude za izabrani filter u e<sup>-</sup>/s/m<sup>2</sup>/&#8491;</li>
+          <li>skyTransparency - Sky transparency</li>
+          <li>totalTransparency - Total transparency on all optical elements</li>
+          <li>telescopeArea - površina primarnog ogledala u m<sup>2</sup></li>
+          <li>QE - kvantna efikasnost izabranog ccd detektora (peak QE)</li>
+          <li>bandwidth - širina izabranog filtera u &#8491;</li>
+        </ul>
+      </div>
+
     </div>
     
   </body>

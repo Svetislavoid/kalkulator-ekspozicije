@@ -1,5 +1,4 @@
     execute: function() {
-      this.fillData();
       this.getFnValues();
       this.calculateExposure();
       this.resetGraph();
@@ -7,6 +6,7 @@
       this.addGraphValues();
       this.drawGraph();
       this.drawHelpLines();
+      this.fillData();
       this.logger();
       this.result.classList.remove("collapsed");
     },

@@ -3,16 +3,16 @@ module.exports = function(grunt) {
   // configuration
   grunt.initConfig({
     // options to plugins, references to files etc.
-    // concat: {
-    //   js: {
-    //     src: ['js/*.js'],
-    //     dest: 'build/main.js'
-    //   },
-    //   css: {
-    //     src: ['css/*.css'],
-    //     dest: 'build/main.css'
-    //   }
-    // },
+    concat: {
+      js: {
+        src: ['js/*.js'],
+        dest: 'build/main.js'
+      },
+      css: {
+        src: ['css/*.css'],
+        dest: 'build/main.css'
+      }
+    },
     import_js: {
       files: {
         expand: true,
@@ -40,6 +40,6 @@ module.exports = function(grunt) {
   // register tasks
   // grunt.registerTask('concat-js', ['concat:js']);
   // grunt.registerTask('concat-css', ['concat:css']);
-  grunt.registerTask('build', ['import_js']);
+  grunt.registerTask('build', ['import_js', 'concat:css']);
 
 };
