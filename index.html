@@ -48,25 +48,25 @@
             <div class="parameters">
               <label for="filter">Band:</label>
               <select class="filter" name="filter">
-                <option value="B">B</option>
-                <option value="V">V</option>
-                <option value="R">R</option>
-                <option value="I">I</option>
-                <option value="L">L</option>
-                <option value="Ha">Ha</option>
-                <option value="Ha-kontinuum">Ha-kontinuum</option>
-                <option value="[SII]">[SII]</option>
+                <option value="B">B (4450 &#8491;)</option>
+                <option value="V">V (5510 &#8491;)</option>
+                <option value="R">R (6580 &#8491;)</option>
+                <option value="I">I (8060 &#8491;)</option>
+                <option value="L">L (35000 &#8491;)</option>
+                <option value="Ha" disabled="disabled">Ha (6563 &#8491;)</option>
+                <option value="Ha-kontinuum" disabled="disabled">Ha-kontinuum (6452 &#8491;)</option>
+                <option value="[SII]" disabled="disabled">[SII] (6826 &#8491;)</option>
               </select>
             </div>
 
-            <div class="parameters">
+<!--             <div class="parameters">
               <label for="opseg">Bandwidth (&#8491;):</label>
               <input class="opseg" type="text" list="opseg">
               <datalist id="opseg">
                 <option value="400">400</option>
                 <option value="600">600</option>
               </datalist>
-            </div>
+            </div> -->
 
             <div class="parameters">
               <label for="transparentnost">Total transparency on all optical elements:</label>
@@ -103,17 +103,19 @@
 
           <div class="result collapsed">
 
-            <p>Telescope: <span class="r-teleskop bold"></span></p>
-            <p>Reducer: <span class="r-reducer bold"></span></p>
-            <p>CCD: <span class="r-ccd bold"></span></p>
-            <p>Band: <span class="r-filter bold"></span></p>
-            <p>Bandwidth (&#8491;): <span class="r-opseg bold"></span></p>
-            <p>Total transparency on all optical elements: <span class="r-transparentnost bold"></span></p>
-            <p>Sky transparency: <span class="r-transparentnost-neba bold"></span></p>
-            <p>Sky brightness (mag/arcsec<sup>2</sup>): <span class="r-sjaj-neba bold"></span></p>
-            <p>Seeing (FWHM in arcsec): <span class="r-seeing bold"></span></p>
-            <p>Magnitude: <span class="r-magnituda bold"></span></p>
-            <p>S/N: <span class="r-signal-to-noise bold"></span></p>
+            <section>
+              <p>Telescope: <span class="r-teleskop bold"></span></p>
+              <p>Reducer: <span class="r-reducer bold"></span></p>
+              <p>CCD: <span class="r-ccd bold"></span></p>
+              <p>Band: <span class="r-filter bold"></span></p>
+              <!-- <p>Bandwidth (&#8491;): <span class="r-opseg bold"></span></p> -->
+              <p>Total transparency on all optical elements: <span class="r-transparentnost bold"></span></p>
+              <p>Sky transparency: <span class="r-transparentnost-neba bold"></span></p>
+              <p>Sky brightness (mag/arcsec<sup>2</sup>): <span class="r-sjaj-neba bold"></span></p>
+              <p>Seeing (FWHM in arcsec): <span class="r-seeing bold"></span></p>
+              <p>Magnitude: <span class="r-magnituda bold"></span></p>
+              <p>S/N: <span class="r-signal-to-noise bold"></span></p>
+            </section>
 
             <p class="ekspozicija bold">Exposure time: t = <span>0</span>s</p>
 

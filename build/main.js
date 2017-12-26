@@ -18,8 +18,16 @@ window.addEventListener('load', function() {
       dc: 0,
       rn: 0,
       qe: 0,
+      wavelength: 0,
+      bandwidth: 0,
+      fluxPh: 0,
+      skyTransparency: 0,
+      totalTransparency: 0,
       pxSize: 0,
       focalLength: 0,
+      area: 0,
+      mag: 0,
+      skyMag: 0,
       snr: 0,
       n: 0,
       res: 0,
@@ -67,6 +75,56 @@ window.addEventListener('load', function() {
         pxSize: 6.8e-6
       }
     },
+    band: {
+      'B': {
+        wavelength: 4450,
+        bandwidth: 940,
+        fluxJY: 4260,
+        fluxPh: 1444.762247191
+      },
+      'V': {
+        wavelength: 5510,
+        bandwidth: 880,
+        fluxJY: 3640,
+        fluxPh: 997.0032667877
+      },
+      'R': {
+        wavelength: 6580,
+        bandwidth: 1380,
+        fluxJY: 3080,
+        fluxPh: 706.4340425532
+      },
+      'I': {
+        wavelength: 8060,
+        bandwidth: 1490,
+        fluxJY: 2550,
+        fluxPh: 477.476426799
+      },
+      'L': {
+        wavelength: 35000,
+        bandwidth: 4720,
+        fluxJY: 280,
+        fluxPh: 12.07364926
+      },
+      'Ha': {
+        wavelength: 6563,
+        bandwidth: 50,
+        fluxJY: 0,
+        fluxPh: 0
+      },
+      'Ha-kontinuum': {
+        wavelength: 6452,
+        bandwidth: 50,
+        fluxJY: 0,
+        fluxPh: 0
+      },
+      '[SII]': {
+        wavelength: 6726,
+        bandwidth: 50,
+        fluxJY: 0,
+        fluxPh: 0
+      }
+    },
 
 
     init: function() {
@@ -84,7 +142,7 @@ window.addEventListener('load', function() {
       this.reducer = document.querySelector('.reducer');
       this.ccd = document.querySelector('.ccd');
       this.filter = document.querySelector('.filter');
-      this.opseg_filtera = document.querySelector('.opseg');
+      // this.opseg_filtera = document.querySelector('.opseg');
       this.transparentnost_elemenata = document.querySelector('.transparentnost');
       this.transparentnost_neba = document.querySelector('.transparentnost-neba');
       this.sjaj_neba = document.querySelector('.sjaj-neba');
@@ -96,7 +154,7 @@ window.addEventListener('load', function() {
       this.r_reducer = document.querySelector('.r-reducer');
       this.r_ccd = document.querySelector('.r-ccd');
       this.r_filter = document.querySelector('.r-filter');
-      this.r_opseg_filtera = document.querySelector('.r-opseg');
+      // this.r_opseg_filtera = document.querySelector('.r-opseg');
       this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
       this.r_transparentnost_neba = document.querySelector('.r-transparentnost-neba');
       this.r_sjaj_neba = document.querySelector('.r-sjaj-neba');
@@ -117,7 +175,7 @@ window.addEventListener('load', function() {
       this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
       this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
       this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
-      this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
+      // this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
       this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
       this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
@@ -150,18 +208,34 @@ window.addEventListener('load', function() {
       this.eqParams.qe = this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe;
       // pixel size
       this.eqParams.pxSize = this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize;
+      // filter wavelength
+      this.eqParams.wavelength = this.band[this.filter.options[this.filter.selectedIndex].value].wavelength;
+      // filter bandwidth
+      this.eqParams.bandwidth = this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth;
+      // filter flux (photon/A/m^2/s)
+      this.eqParams.fluxPh = this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh*10000;
       // signal-to-noise
       this.eqParams.snr = Number(this.signal_to_noise.value);
       // telescope focalLength
       this.eqParams.focalLength = this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*this.reducer.value;
+      // unobstructed area of main mirror in m^2
+      this.eqParams.area = Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4;
       // camera resolution
       this.eqParams.res = Number((this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
-      this.eqParams.n = Number((Math.pow(this.seeing.value,2)*Math.PI/(4*this.eqParams.res)).toFixed(2));
+      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value,2)*Math.PI/this.eqParams.res).toFixed(2));
+      // sky transparency
+      this.eqParams.skyTransparency = Number(this.transparentnost_neba.value);
+      // total transparency on all optical elements
+      this.eqParams.totalTransparency = Number(this.transparentnost_elemenata.value);
+      // object magnitude
+      this.eqParams.mag = Number(this.magnituda.value);
+      // sky magnitude
+      this.eqParams.skyMag = Number(this.sjaj_neba.value);
       // signal
-      this.eqParams.sig = 2*this.eqParams.qe;
+      this.eqParams.sig = Math.pow(10, -1*this.eqParams.mag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth;
       // sky
-      this.eqParams.sky = Number(this.sjaj_neba.value)*this.eqParams.qe;
+      this.eqParams.sky = Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2);
     },
 
     calculateExposure: function() {
@@ -378,7 +452,7 @@ window.addEventListener('load', function() {
       console.log("Reducer: " + this.reducer.options[this.reducer.selectedIndex].text);
       console.log("CCD: " + this.ccd.options[this.ccd.selectedIndex].value);
       console.log("Filter: " + this.filter.options[this.filter.selectedIndex].text);
-      console.log("Opseg filtera: " + this.opseg_filtera.value);
+      // console.log("Opseg filtera: " + this.opseg_filtera.value);
       console.log("Transparentnost elemenata: " + this.transparentnost_elemenata.value);
       console.log("Transparentnost neba: " + this.transparentnost_neba.value);
       console.log("Sjaj neba: " + this.sjaj_neba.value);

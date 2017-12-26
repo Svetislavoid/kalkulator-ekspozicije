@@ -3,7 +3,7 @@
       this.reducer = document.querySelector('.reducer');
       this.ccd = document.querySelector('.ccd');
       this.filter = document.querySelector('.filter');
-      this.opseg_filtera = document.querySelector('.opseg');
+      // this.opseg_filtera = document.querySelector('.opseg');
       this.transparentnost_elemenata = document.querySelector('.transparentnost');
       this.transparentnost_neba = document.querySelector('.transparentnost-neba');
       this.sjaj_neba = document.querySelector('.sjaj-neba');
@@ -15,7 +15,7 @@
       this.r_reducer = document.querySelector('.r-reducer');
       this.r_ccd = document.querySelector('.r-ccd');
       this.r_filter = document.querySelector('.r-filter');
-      this.r_opseg_filtera = document.querySelector('.r-opseg');
+      // this.r_opseg_filtera = document.querySelector('.r-opseg');
       this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
       this.r_transparentnost_neba = document.querySelector('.r-transparentnost-neba');
       this.r_sjaj_neba = document.querySelector('.r-sjaj-neba');
@@ -36,7 +36,7 @@
       this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
       this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
       this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
-      this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
+      // this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
       this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
       this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
