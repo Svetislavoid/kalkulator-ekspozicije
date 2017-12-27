@@ -22,7 +22,7 @@
       // camera resolution
       this.eqParams.res = Number((this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
-      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value,2)*Math.PI/this.eqParams.res).toFixed(2));
+      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
       // sky transparency
       this.eqParams.skyTransparency = Number(this.transparentnost_neba.value);
       // total transparency on all optical elements
@@ -55,9 +55,9 @@
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
       if (this.eqParams.exposure > 20) {
-        this.eqParams.exposure = Math.round(this.eqParams.exposure);
+        this.ekspozicija.innerHTML = Math.round(this.eqParams.exposure);
+      } else {
+        this.ekspozicija.innerHTML = this.eqParams.exposure;
       }
-
-      this.ekspozicija.innerHTML = this.eqParams.exposure;
 
     },

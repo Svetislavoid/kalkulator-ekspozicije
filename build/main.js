@@ -69,8 +69,8 @@ window.addEventListener('load', function() {
         pxSize: 16e-6
       },
       sbigst10xme: {
-        dc: null,
-        rn: null,
+        dc: 0.5,
+        rn: 8.8,
         qe: 0.85,
         pxSize: 6.8e-6
       }
@@ -170,7 +170,7 @@ window.addEventListener('load', function() {
       this.result = document.querySelector('.result');
 
       this.s_sig = document.querySelector('.s_sig');
-      this.r_sky = document.querySelector('.r_sky');
+      this.s_sky = document.querySelector('.s_sky');
       this.s_dc = document.querySelector('.s_dc');
       this.s_ro = document.querySelector('.s_ro');
       this.s_pix = document.querySelector('.n_pix');
@@ -190,7 +190,7 @@ window.addEventListener('load', function() {
       this.r_signal_to_noise.innerHTML = this.signal_to_noise.value;
 
       this.s_sig.innerHTML = (this.eqParams.sig).toFixed(2);
-      this.r_sky.innerHTML = (this.eqParams.sky).toFixed(2);
+      this.s_sky.innerHTML = (this.eqParams.sky).toFixed(2);
       this.s_dc.innerHTML = this.eqParams.dc;
       this.s_ro.innerHTML = this.eqParams.rn;
       this.s_pix.innerHTML = this.eqParams.n;
@@ -237,7 +237,7 @@ window.addEventListener('load', function() {
       // camera resolution
       this.eqParams.res = Number((this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
-      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value,2)*Math.PI/this.eqParams.res).toFixed(2));
+      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
       // sky transparency
       this.eqParams.skyTransparency = Number(this.transparentnost_neba.value);
       // total transparency on all optical elements
@@ -270,10 +270,10 @@ window.addEventListener('load', function() {
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
       if (this.eqParams.exposure > 20) {
-        this.eqParams.exposure = Math.round(this.eqParams.exposure);
+        this.ekspozicija.innerHTML = Math.round(this.eqParams.exposure);
+      } else {
+        this.ekspozicija.innerHTML = this.eqParams.exposure;
       }
-
-      this.ekspozicija.innerHTML = this.eqParams.exposure;
 
     },
 
@@ -369,7 +369,7 @@ window.addEventListener('load', function() {
         while (this.graph.upLimitX%this.graph.broj_podeokaX !== 0) {
           this.graph.upLimitX++;
         }
-        for (let j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 20; j += this.graph.podeokX) {
+        for (let j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 30; j += this.graph.podeokX) {
           ctx.moveTo(j,height-3);
           ctx.fillText(n*this.graph.upLimitX/this.graph.broj_podeokaX,j-5,height-this.graph.yOffset+15);
           n++;

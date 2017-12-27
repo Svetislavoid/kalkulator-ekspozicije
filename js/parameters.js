@@ -66,8 +66,8 @@
         pxSize: 16e-6
       },
       sbigst10xme: {
-        dc: null,
-        rn: null,
+        dc: 0.5,
+        rn: 8.8,
         qe: 0.85,
         pxSize: 6.8e-6
       }

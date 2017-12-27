@@ -89,7 +89,7 @@
         while (this.graph.upLimitX%this.graph.broj_podeokaX !== 0) {
           this.graph.upLimitX++;
         }
-        for (let j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 20; j += this.graph.podeokX) {
+        for (let j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 30; j += this.graph.podeokX) {
           ctx.moveTo(j,height-3);
           ctx.fillText(n*this.graph.upLimitX/this.graph.broj_podeokaX,j-5,height-this.graph.yOffset+15);
           n++;

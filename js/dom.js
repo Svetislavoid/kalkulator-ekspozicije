@@ -31,7 +31,7 @@
       this.result = document.querySelector('.result');
 
       this.s_sig = document.querySelector('.s_sig');
-      this.r_sky = document.querySelector('.r_sky');
+      this.s_sky = document.querySelector('.s_sky');
       this.s_dc = document.querySelector('.s_dc');
       this.s_ro = document.querySelector('.s_ro');
       this.s_pix = document.querySelector('.n_pix');
@@ -51,7 +51,7 @@
       this.r_signal_to_noise.innerHTML = this.signal_to_noise.value;
 
       this.s_sig.innerHTML = (this.eqParams.sig).toFixed(2);
-      this.r_sky.innerHTML = (this.eqParams.sky).toFixed(2);
+      this.s_sky.innerHTML = (this.eqParams.sky).toFixed(2);
       this.s_dc.innerHTML = this.eqParams.dc;
       this.s_ro.innerHTML = this.eqParams.rn;
       this.s_pix.innerHTML = this.eqParams.n;
