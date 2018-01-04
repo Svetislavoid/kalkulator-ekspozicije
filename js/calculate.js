@@ -7,6 +7,8 @@
       this.eqParams.qe = this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe;
       // pixel size
       this.eqParams.pxSize = this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize;
+      // binning
+      this.eqParams.binning = this.binning.value;
       // filter wavelength
       this.eqParams.wavelength = this.band[this.filter.options[this.filter.selectedIndex].value].wavelength;
       // filter bandwidth
@@ -20,7 +22,7 @@
       // unobstructed area of main mirror in m^2
       this.eqParams.area = Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4;
       // camera resolution
-      this.eqParams.res = Number((this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
+      this.eqParams.res = Number((this.eqParams.binning*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
       this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
       // sky transparency

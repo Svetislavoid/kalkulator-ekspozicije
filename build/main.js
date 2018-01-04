@@ -24,6 +24,7 @@ window.addEventListener('load', function() {
       skyTransparency: 0,
       totalTransparency: 0,
       pxSize: 0,
+      binning: 1,
       focalLength: 0,
       area: 0,
       mag: 0,
@@ -130,10 +131,20 @@ window.addEventListener('load', function() {
     init: function() {
       this.cacheDom();
       this.bindEvent('click', this.submit, this.execute.bind(this));
+      this.bindEvent('click', this.customTelescope, this.addCustomTelescope.bind(this));
+      this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
     },
 
     bindEvent: function(event, target, callback) {
       target.addEventListener(event, callback);
+    },
+
+    addCustomTelescope: function() {
+      alert('Custom telescope');
+    },
+
+    addCustomCCD: function() {
+      alert('Custom CCD');
     },
 
 
@@ -141,6 +152,7 @@ window.addEventListener('load', function() {
       this.teleskop = document.querySelector('.teleskop');
       this.reducer = document.querySelector('.reducer');
       this.ccd = document.querySelector('.ccd');
+      this.binning = document.querySelector('.binning');
       this.filter = document.querySelector('.filter');
       // this.opseg_filtera = document.querySelector('.opseg');
       this.transparentnost_elemenata = document.querySelector('.transparentnost');
@@ -153,6 +165,7 @@ window.addEventListener('load', function() {
       this.r_teleskop = document.querySelector('.r-teleskop');
       this.r_reducer = document.querySelector('.r-reducer');
       this.r_ccd = document.querySelector('.r-ccd');
+      this.r_binning = document.querySelector('.r-binning');
       this.r_filter = document.querySelector('.r-filter');
       // this.r_opseg_filtera = document.querySelector('.r-opseg');
       this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
@@ -166,6 +179,8 @@ window.addEventListener('load', function() {
       this.canvas = document.querySelector('#canvas');
 
       this.submit = document.querySelector('.submit');
+      this.customTelescope = document.querySelector('.customTelescope');
+      this.customCCD = document.querySelector('.customCCD');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
 
@@ -180,6 +195,7 @@ window.addEventListener('load', function() {
       this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;            
       this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
       this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
+      this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
       this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
       // this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
@@ -222,6 +238,8 @@ window.addEventListener('load', function() {
       this.eqParams.qe = this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe;
       // pixel size
       this.eqParams.pxSize = this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize;
+      // binning
+      this.eqParams.binning = this.binning.value;
       // filter wavelength
       this.eqParams.wavelength = this.band[this.filter.options[this.filter.selectedIndex].value].wavelength;
       // filter bandwidth
@@ -235,7 +253,7 @@ window.addEventListener('load', function() {
       // unobstructed area of main mirror in m^2
       this.eqParams.area = Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4;
       // camera resolution
-      this.eqParams.res = Number((this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
+      this.eqParams.res = Number((this.eqParams.binning*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
       this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
       // sky transparency

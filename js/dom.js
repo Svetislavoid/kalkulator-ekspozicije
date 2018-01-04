@@ -2,6 +2,7 @@
       this.teleskop = document.querySelector('.teleskop');
       this.reducer = document.querySelector('.reducer');
       this.ccd = document.querySelector('.ccd');
+      this.binning = document.querySelector('.binning');
       this.filter = document.querySelector('.filter');
       // this.opseg_filtera = document.querySelector('.opseg');
       this.transparentnost_elemenata = document.querySelector('.transparentnost');
@@ -14,6 +15,7 @@
       this.r_teleskop = document.querySelector('.r-teleskop');
       this.r_reducer = document.querySelector('.r-reducer');
       this.r_ccd = document.querySelector('.r-ccd');
+      this.r_binning = document.querySelector('.r-binning');
       this.r_filter = document.querySelector('.r-filter');
       // this.r_opseg_filtera = document.querySelector('.r-opseg');
       this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
@@ -27,6 +29,8 @@
       this.canvas = document.querySelector('#canvas');
 
       this.submit = document.querySelector('.submit');
+      this.customTelescope = document.querySelector('.customTelescope');
+      this.customCCD = document.querySelector('.customCCD');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
 
@@ -41,6 +45,7 @@
       this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;            
       this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
       this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
+      this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
       this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
       // this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;

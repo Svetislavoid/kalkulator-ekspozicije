@@ -23,6 +23,7 @@
               <select class="teleskop" name="teleskop">
                 <option value="cassegrain">60cm Cassegrain</option>
                 <option value="nasmyth">1.4m Nasmyth</option>
+                <option value="custom" class="customTelescope">Custom telescope</option>
               </select>
             </div>
 
@@ -42,6 +43,18 @@
                 <option value="apogeeU42">Apogee U42</option>
                 <option value="apogeeE47">Apogee E47</option>
                 <option value="sbigst10xme">SBIG ST10XME</option>
+                <option value="custom" class="customCCD">Custom CCD</option>
+              </select>
+            </div>
+
+            <div class="parameters">
+              <label for="binning">CCD binning:</label>
+              <select class="binning" name="binning">
+                <option value="1">1x1</option>
+                <option value="2">2x2</option>
+                <option value="3">3x3</option>
+                <option value="4">4x4</option>
+                <option value="5">5x5</option>
               </select>
             </div>
 
@@ -107,6 +120,7 @@
               <p>Telescope: <span class="r-teleskop bold"></span></p>
               <p>Reducer: <span class="r-reducer bold"></span></p>
               <p>CCD: <span class="r-ccd bold"></span></p>
+              <p>CCD binning: <span class="r-binning bold"></span></p>
               <p>Band: <span class="r-filter bold"></span></p>
               <!-- <p>Bandwidth (&#8491;): <span class="r-opseg bold"></span></p> -->
               <p>Total transparency on all optical elements: <span class="r-transparentnost bold"></span></p>
