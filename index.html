@@ -11,7 +11,36 @@
     
   <body>
 
+    <div class="screenShade"></div>
     <div class="wrapper">
+
+      <div class="modal">
+        <div class="telescopeParams">
+          <label for="telescopeDiameter">Telescope diameter (m):</label>
+          <input class="telescopeDiameter" type="text">
+          <label for="telescopeFocalLength">Telescope focal length (m):</label>
+          <input class="telescopeFocalLength" type="text">
+        </div>
+        <div class="ccdParams">
+          <label for="ccdRO">CCD read-out noise (e<sup>-</sup>/pix):</label>
+          <input class="ccdRO" type="text">
+          <label for="ccdDC">CCD dark current (e<sup>-</sup>/s/pix):</label>
+          <input class="ccdDC" type="text">
+          <label for="ccdPixelSize">CCD pixel size (&#181;m):</label>
+          <input class="ccdPixelSize" type="text">
+          <label for="ccdQE">CCD peak QE (%):</label>
+          <input class="ccdQE" type="text">
+        </div>
+        <div class="filterParams">
+          <label for="bandWavelength">Filter mean wavelength (&#8491;):</label>
+          <input class="bandWavelength" type="text">
+          <label for="bandBandwidth">Filter bandwidth (&#8491;):</label>
+          <input class="bandBandwidth" type="text">
+          <label for="bandFlux">Zero magnitude flux (photon/s/cm<sup>2</sup>/&#8491;):</label>
+          <input class="bandFlux" type="text">
+        </div>
+        <input type="button" class="btn modalSubmit" value="Ok">
+      </div>
             
       <form>
         <fieldset>
@@ -69,17 +98,9 @@
                 <option value="Ha" disabled="disabled">Ha (6563 &#8491;)</option>
                 <option value="Ha-kontinuum" disabled="disabled">Ha-kontinuum (6452 &#8491;)</option>
                 <option value="[SII]" disabled="disabled">[SII] (6826 &#8491;)</option>
+                <option value="custom" class="customBand">Custom band</option>
               </select>
             </div>
-
-<!--             <div class="parameters">
-              <label for="opseg">Bandwidth (&#8491;):</label>
-              <input class="opseg" type="text" list="opseg">
-              <datalist id="opseg">
-                <option value="400">400</option>
-                <option value="600">600</option>
-              </datalist>
-            </div> -->
 
             <div class="parameters">
               <label for="transparentnost">Total transparency on all optical elements:</label>
@@ -111,7 +132,7 @@
               <input class="signal-to-noise" type="text">
             </div>
           
-            <input type="button" class="submit" value="Calculate">
+            <input type="button" class="btn submit" value="Calculate">
           </div>
 
           <div class="result collapsed">
@@ -122,7 +143,6 @@
               <p>CCD: <span class="r-ccd bold"></span></p>
               <p>CCD binning: <span class="r-binning bold"></span></p>
               <p>Band: <span class="r-filter bold"></span></p>
-              <!-- <p>Bandwidth (&#8491;): <span class="r-opseg bold"></span></p> -->
               <p>Total transparency on all optical elements: <span class="r-transparentnost bold"></span></p>
               <p>Sky transparency: <span class="r-transparentnost-neba bold"></span></p>
               <p>Sky brightness (mag/arcsec<sup>2</sup>): <span class="r-sjaj-neba bold"></span></p>

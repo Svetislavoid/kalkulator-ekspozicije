@@ -16,7 +16,7 @@ window.addEventListener('load', function() {
       sig: 0,
       sky: 0,
       dc: 0,
-      rn: 0,
+      ro: 0,
       qe: 0,
       wavelength: 0,
       bandwidth: 0,
@@ -42,38 +42,48 @@ window.addEventListener('load', function() {
       nasmyth: {
         diameter: 1.4,
         focalLength: 11.2
+      },
+      custom: {
+        diameter: 0,
+        focalLength: 0
       }
     },
     camera: {
       apogeeU42: {
         dc: 1,
-        rn: 10,
+        ro: 10,
         qe: 0.9,
         pxSize: 13.5e-6
       },
       apogeeE47: {
         dc: 0.1,
-        rn: 10,
+        ro: 10,
         qe: 0.96,
         pxSize: 13e-6
       },
       iKonL: {
         dc: null,
-        rn: null,
+        ro: null,
         qe: 0.95,
         pxSize: 13.5e-6
       },
       iXon897: {
         dc: null,
-        rn: null,
+        ro: null,
         qe: 0.925,
         pxSize: 16e-6
       },
       sbigst10xme: {
         dc: 0.5,
-        rn: 8.8,
+        ro: 8.8,
         qe: 0.85,
         pxSize: 6.8e-6
+      },
+      custom: {
+        dc: 0,
+        ro: 0,
+        qe: 0,
+        pxSize: 0
       }
     },
     band: {
@@ -124,6 +134,12 @@ window.addEventListener('load', function() {
         bandwidth: 50,
         fluxJY: 0,
         fluxPh: 0
+      },
+      'custom': {
+        wavelength: 0,
+        bandwidth: 0,
+        fluxJY: 0,
+        fluxPh: 0
       }
     },
 
@@ -133,18 +149,51 @@ window.addEventListener('load', function() {
       this.bindEvent('click', this.submit, this.execute.bind(this));
       this.bindEvent('click', this.customTelescope, this.addCustomTelescope.bind(this));
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
+      this.bindEvent('click', this.customBand, this.addCustomBand.bind(this));
+      this.bindEvent('click', this.modalSubmit, this.submitCustomParams.bind(this));
     },
 
     bindEvent: function(event, target, callback) {
       target.addEventListener(event, callback);
     },
 
+    shadeScreen: function() {
+      this.screenShade.classList.toggle("on");
+    },
+
     addCustomTelescope: function() {
-      alert('Custom telescope');
+      this.shadeScreen();
+      this.telescopeParams.classList.add("on");
+      this.modal.classList.add("on");
     },
 
     addCustomCCD: function() {
-      alert('Custom CCD');
+      this.shadeScreen();
+      this.ccdParams.classList.add("on");
+      this.modal.classList.add("on");
+    },
+
+    addCustomBand: function() {
+      this.shadeScreen();
+      this.filterParams.classList.add("on");
+      this.modal.classList.add("on");
+    },
+
+    submitCustomParams: function() {
+      this.shadeScreen();
+      this.modal.classList.remove("on");
+      this.telescopeParams.classList.remove("on");
+      this.ccdParams.classList.remove("on");
+      this.filterParams.classList.remove("on");
+      this.telescope.custom.diameter = this.telescopeDiameter.value;
+      this.telescope.custom.focalLength = this.telescopeFocalLength.value;
+      this.camera.custom.ro = this.ccdRO.value;
+      this.camera.custom.dc = this.ccdDC.value;
+      this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
+      this.camera.custom.qe = this.ccdQE.value/100;
+      this.band.custom.wavelength = this.bandWavelength.value;
+      this.band.custom.bandwidth = this.bandBandwidth.value;
+      this.band.custom.fluxPh = this.bandFlux.value;
     },
 
 
@@ -154,7 +203,6 @@ window.addEventListener('load', function() {
       this.ccd = document.querySelector('.ccd');
       this.binning = document.querySelector('.binning');
       this.filter = document.querySelector('.filter');
-      // this.opseg_filtera = document.querySelector('.opseg');
       this.transparentnost_elemenata = document.querySelector('.transparentnost');
       this.transparentnost_neba = document.querySelector('.transparentnost-neba');
       this.sjaj_neba = document.querySelector('.sjaj-neba');
@@ -167,7 +215,6 @@ window.addEventListener('load', function() {
       this.r_ccd = document.querySelector('.r-ccd');
       this.r_binning = document.querySelector('.r-binning');
       this.r_filter = document.querySelector('.r-filter');
-      // this.r_opseg_filtera = document.querySelector('.r-opseg');
       this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
       this.r_transparentnost_neba = document.querySelector('.r-transparentnost-neba');
       this.r_sjaj_neba = document.querySelector('.r-sjaj-neba');
@@ -178,9 +225,26 @@ window.addEventListener('load', function() {
       this.ekspozicija = document.querySelector('.ekspozicija span');
       this.canvas = document.querySelector('#canvas');
 
+      this.telescopeDiameter = document.querySelector('.telescopeDiameter');
+      this.telescopeFocalLength = document.querySelector('.telescopeFocalLength');
+      this.ccdRO = document.querySelector('.ccdRO');
+      this.ccdDC = document.querySelector('.ccdDC');
+      this.ccdPixelSize = document.querySelector('.ccdPixelSize');
+      this.ccdQE = document.querySelector('.ccdQE');
+      this.bandWavelength = document.querySelector('.bandWavelength');
+      this.bandBandwidth = document.querySelector('.bandBandwidth');
+      this.bandFlux = document.querySelector('.bandFlux');      
+
+      this.screenShade = document.querySelector('.screenShade');
       this.submit = document.querySelector('.submit');
+      this.modal = document.querySelector('.modal');
+      this.telescopeParams = document.querySelector('.telescopeParams');
+      this.ccdParams = document.querySelector('.ccdParams');
+      this.filterParams = document.querySelector('.filterParams');
+      this.modalSubmit = document.querySelector('.modalSubmit');
       this.customTelescope = document.querySelector('.customTelescope');
       this.customCCD = document.querySelector('.customCCD');
+      this.customBand = document.querySelector('.customBand');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
 
@@ -192,12 +256,23 @@ window.addEventListener('load', function() {
     },
 
     fillData: function() {
-      this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;            
+      if (this.teleskop.options[this.teleskop.selectedIndex].text === 'Custom telescope') {
+        this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text + ' (D = ' + this.telescope.custom.diameter + 'm, f = ' + this.telescope.custom.focalLength + 'm)';
+      } else {
+        this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
+      }
+      if (this.ccd.options[this.ccd.selectedIndex].text === 'Custom CCD') {
+        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc + 'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' + this.camera.custom.qe + ', pixel size = ' + this.camera.custom.pxSize*1000000 + '&#181;m)';
+      } else {
+        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
+      }
+      if (this.filter.options[this.filter.selectedIndex].text === 'Custom band') {
+        this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text + ' (&#955; = ' + this.band.custom.wavelength + '&#8491;, &#916;&#955; = ' + this.band.custom.bandwidth + '&#8491;, F = ' + this.band.custom.fluxPh + 'photon/s/cm<sup>2</sup>/&#8491;)';
+      } else {
+        this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
+      }
       this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
-      this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
       this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
-      this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
-      // this.r_opseg_filtera.innerHTML = this.opseg_filtera.value;
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
       this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
       this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
@@ -208,7 +283,7 @@ window.addEventListener('load', function() {
       this.s_sig.innerHTML = (this.eqParams.sig).toFixed(2);
       this.s_sky.innerHTML = (this.eqParams.sky).toFixed(2);
       this.s_dc.innerHTML = this.eqParams.dc;
-      this.s_ro.innerHTML = this.eqParams.rn;
+      this.s_ro.innerHTML = this.eqParams.ro;
       this.s_pix.innerHTML = this.eqParams.n;
     },
 
@@ -231,27 +306,27 @@ window.addEventListener('load', function() {
 
     getFnValues: function() {
       // dark current
-      this.eqParams.dc = this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc;
+      this.eqParams.dc = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc);
       // read-out noise
-      this.eqParams.rn = this.camera[this.ccd.options[this.ccd.selectedIndex].value].rn;
+      this.eqParams.ro = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].ro);
       // quantum efficiency
-      this.eqParams.qe = this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe;
+      this.eqParams.qe = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
       // pixel size
-      this.eqParams.pxSize = this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize;
+      this.eqParams.pxSize = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize);
       // binning
-      this.eqParams.binning = this.binning.value;
+      this.eqParams.binning = Number(this.binning.value);
       // filter wavelength
-      this.eqParams.wavelength = this.band[this.filter.options[this.filter.selectedIndex].value].wavelength;
+      this.eqParams.wavelength = Number(this.band[this.filter.options[this.filter.selectedIndex].value].wavelength);
       // filter bandwidth
-      this.eqParams.bandwidth = this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth;
+      this.eqParams.bandwidth = Number(this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth);
       // filter flux (photon/A/m^2/s)
-      this.eqParams.fluxPh = this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh*10000;
+      this.eqParams.fluxPh = Number(this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh*10000);
       // signal-to-noise
       this.eqParams.snr = Number(this.signal_to_noise.value);
       // telescope focalLength
-      this.eqParams.focalLength = this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*this.reducer.value;
+      this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*this.reducer.value);
       // unobstructed area of main mirror in m^2
-      this.eqParams.area = Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4;
+      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4);
       // camera resolution
       this.eqParams.res = Number((this.eqParams.binning*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
@@ -265,9 +340,9 @@ window.addEventListener('load', function() {
       // sky magnitude
       this.eqParams.skyMag = Number(this.sjaj_neba.value);
       // signal
-      this.eqParams.sig = Math.pow(10, -1*this.eqParams.mag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth;
+      this.eqParams.sig = Number(Math.pow(10, -1*this.eqParams.mag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth);
       // sky
-      this.eqParams.sky = Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2);
+      this.eqParams.sky = Number(Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
     },
 
     calculateExposure: function() {
@@ -278,13 +353,13 @@ window.addEventListener('load', function() {
       // dark current
       var dc = this.eqParams.dc;
       // read-out noise
-      var rn = this.eqParams.rn;
+      var ro = this.eqParams.ro;
       // number of pixels
       var n = this.eqParams.n;
       // signal-to-moise ratio
       var snr = this.eqParams.snr;
 
-      this.eqParams.exposure = ((Math.pow(snr,2)*(sig+(sky+dc)*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+(sky+dc)*n),2)+4*Math.pow(sig*snr,2)*rn*n))/(2*Math.pow(sig,2))).toFixed(2);
+      this.eqParams.exposure = Number(((Math.pow(snr,2)*(sig+(sky+dc)*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+(sky+dc)*n),2)+4*Math.pow(sig*snr,2)*ro*n))/(2*Math.pow(sig,2))).toFixed(2));
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
       if (this.eqParams.exposure > 20) {
@@ -430,7 +505,7 @@ window.addEventListener('load', function() {
       var sig = this.eqParams.sig;
       var sky = this.eqParams.sky;
       var dc = this.eqParams.dc;
-      var rn = this.eqParams.rn;
+      var ro = this.eqParams.ro;
       var n = this.eqParams.n;
 
       var snr = 0;
@@ -442,7 +517,7 @@ window.addEventListener('load', function() {
 
       if (this.graph.upLimitX !== 0) {
         for (let t = 0; t <= this.graph.upLimitX; t+= this.graph.upLimitX/this.graph.dataPointsNo) {
-          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+rn*n);
+          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+ro*n);
           ctx.lineTo(t*scaleX,snr*scaleY);
         }
       }

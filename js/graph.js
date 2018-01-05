@@ -132,7 +132,7 @@
       var sig = this.eqParams.sig;
       var sky = this.eqParams.sky;
       var dc = this.eqParams.dc;
-      var rn = this.eqParams.rn;
+      var ro = this.eqParams.ro;
       var n = this.eqParams.n;
 
       var snr = 0;
@@ -144,7 +144,7 @@
 
       if (this.graph.upLimitX !== 0) {
         for (let t = 0; t <= this.graph.upLimitX; t+= this.graph.upLimitX/this.graph.dataPointsNo) {
-          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+rn*n);
+          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+ro*n);
           ctx.lineTo(t*scaleX,snr*scaleY);
         }
       }

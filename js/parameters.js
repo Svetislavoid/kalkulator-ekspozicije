@@ -13,7 +13,7 @@
       sig: 0,
       sky: 0,
       dc: 0,
-      rn: 0,
+      ro: 0,
       qe: 0,
       wavelength: 0,
       bandwidth: 0,
@@ -39,38 +39,48 @@
       nasmyth: {
         diameter: 1.4,
         focalLength: 11.2
+      },
+      custom: {
+        diameter: 0,
+        focalLength: 0
       }
     },
     camera: {
       apogeeU42: {
         dc: 1,
-        rn: 10,
+        ro: 10,
         qe: 0.9,
         pxSize: 13.5e-6
       },
       apogeeE47: {
         dc: 0.1,
-        rn: 10,
+        ro: 10,
         qe: 0.96,
         pxSize: 13e-6
       },
       iKonL: {
         dc: null,
-        rn: null,
+        ro: null,
         qe: 0.95,
         pxSize: 13.5e-6
       },
       iXon897: {
         dc: null,
-        rn: null,
+        ro: null,
         qe: 0.925,
         pxSize: 16e-6
       },
       sbigst10xme: {
         dc: 0.5,
-        rn: 8.8,
+        ro: 8.8,
         qe: 0.85,
         pxSize: 6.8e-6
+      },
+      custom: {
+        dc: 0,
+        ro: 0,
+        qe: 0,
+        pxSize: 0
       }
     },
     band: {
@@ -119,6 +129,12 @@
       '[SII]': {
         wavelength: 6726,
         bandwidth: 50,
+        fluxJY: 0,
+        fluxPh: 0
+      },
+      'custom': {
+        wavelength: 0,
+        bandwidth: 0,
         fluxJY: 0,
         fluxPh: 0
       }
