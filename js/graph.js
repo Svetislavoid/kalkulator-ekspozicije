@@ -89,13 +89,13 @@
         while (this.graph.upLimitX%this.graph.broj_podeokaX !== 0) {
           this.graph.upLimitX++;
         }
-        for (let j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 30; j += this.graph.podeokX) {
+        for (var j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 30; j += this.graph.podeokX) {
           ctx.moveTo(j,height-3);
           ctx.fillText(n*this.graph.upLimitX/this.graph.broj_podeokaX,j-5,height-this.graph.yOffset+15);
           n++;
         }
       } else {
-        for (let j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 20; j += this.graph.podeokX) {
+        for (var j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 20; j += this.graph.podeokX) {
           ctx.moveTo(j,height-3);
           ctx.fillText((n*this.graph.upLimitX/this.graph.broj_podeokaX).toFixed(2),j-5,height-this.graph.yOffset+15);
           n++;
@@ -107,13 +107,13 @@
         while (this.graph.upLimitY%this.graph.broj_podeokaY !== 0) {
           this.graph.upLimitY++;
         }
-        for (let j = height - 15 - this.graph.yOffset - this.graph.podeokY; j > 20; j -= this.graph.podeokY) {
+        for (var j = height - 15 - this.graph.yOffset - this.graph.podeokY; j > 20; j -= this.graph.podeokY) {
           ctx.moveTo(0,j);
           ctx.fillText(m*this.graph.upLimitY/this.graph.broj_podeokaY,3,j+10);
           m++;
         }
       } else {
-        for (let j = height - 15 - this.graph.yOffset - this.graph.podeokY; j > 20; j -= this.graph.podeokY) {
+        for (var j = height - 15 - this.graph.yOffset - this.graph.podeokY; j > 20; j -= this.graph.podeokY) {
           ctx.moveTo(0,j);
           ctx.fillText((m*this.graph.upLimitY/this.graph.broj_podeokaY).toFixed(2),3,j+10);
           m++;
@@ -143,7 +143,7 @@
       ctx.moveTo(0,0);
 
       if (this.graph.upLimitX !== 0) {
-        for (let t = 0; t <= this.graph.upLimitX; t+= this.graph.upLimitX/this.graph.dataPointsNo) {
+        for (var t = 0; t <= this.graph.upLimitX; t+= this.graph.upLimitX/this.graph.dataPointsNo) {
           snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+ro*n);
           ctx.lineTo(t*scaleX,snr*scaleY);
         }
