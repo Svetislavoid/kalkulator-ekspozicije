@@ -17,7 +17,7 @@
 
 .wrapper {
   max-width: 1300px;
-  min-width: 1120px;
+  min-width: 1020px;
   margin: 30px auto;
 }
 
@@ -85,8 +85,7 @@
 
 #canvas {
   display: block;
-  /*border: 1px solid #333;*/
-  margin: 15px auto 0;
+  margin: 40px auto 0;
 }
 
 fieldset {
@@ -98,7 +97,8 @@ legend {
 }
 
 .collapsed {
-  /*display: none;*/
+  height: 0;
+  overflow: hidden;
 }
 
 .parameters {
@@ -110,15 +110,24 @@ legend {
   background-color: #cde; 
 }
 
+.showGraph {
+  text-align: center;
+}
+
+.showGraph input {
+  margin: 0;
+  vertical-align: bottom;
+}
+
 label {
   display: inline-block;
-  width: 60%;
+  width: 55%;
   vertical-align: middle;
   padding-right: 20px;
 }
 
 label + * {
-  width: 39%;
+  width: 40%;
 }
 
 .btn {
@@ -141,18 +150,28 @@ label + * {
   font-weight: 700;
 }
 
-.ekspozicija,
-.ekspozicija span {
+.result .ekspozicija,
+.result .ekspozicija span {
+  margin-top: 15px;
   font-size: 18px;
   text-align: center;
 }
 
-.report {
+.helpButton {
+  display: block;
+  text-align: center;
+  width: 60px;
+  font-size: 20px;
+  text-decoration: none;
+  margin: 15px auto 0;
+}
+
+.help {
   margin-top: 20px;
   padding: 40px 140px 0;
 }
 
-.report img {
+.help img {
   display: block;
   margin: 0 auto;
 }

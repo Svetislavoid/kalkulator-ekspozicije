@@ -20,6 +20,8 @@
           <input class="telescopeDiameter" type="text">
           <label for="telescopeFocalLength">Telescope focal length (m):</label>
           <input class="telescopeFocalLength" type="text">
+          <label for="telescopeEffectiveAreaCoef">Effective area of main mirror (%):</label>
+          <input class="telescopeEffectiveAreaCoef" type="text">
         </div>
         <div class="ccdParams">
           <label for="ccdRO">CCD read-out noise (e<sup>-</sup>/pix):</label>
@@ -131,11 +133,13 @@
               <label for="signal-to-noise">S/N:</label>
               <input class="signal-to-noise" type="text">
             </div>
+
+            <p class="showGraph">Show graph <input type="checkbox" checked="checked" name="showGraph"></p>
           
             <input type="button" class="btn submit" value="Calculate">
           </div>
 
-          <div class="result collapsed">
+          <div class="result">
 
             <section>
               <p>Telescope: <span class="r-teleskop bold"></span></p>
@@ -149,28 +153,26 @@
               <p>Seeing (FWHM in arcsec): <span class="r-seeing bold"></span></p>
               <p>Magnitude: <span class="r-magnituda bold"></span></p>
               <p>S/N: <span class="r-signal-to-noise bold"></span></p>
+              <p>Signal from the object: <span class="s_sig bold">0</span> e<sup>-</sup>/s</p>
+              <p>Signal from the sky: <span class="s_sky bold">0</span> e<sup>-</sup>/s/pix</p>
+              <p>Dark current: <span class="s_dc bold">0</span> e<sup>-</sup>/s/pix</p>
+              <p>Read out noise: <span class="s_ro bold">0</span> e<sup>-</sup>/pix</p>
+              <p>Number of pixels: <span class="n_pix bold">0</span> pix</p>
             </section>
 
             <p class="ekspozicija bold">Exposure time: t = <span>0</span>s</p>
 
-            <canvas id="canvas" width="550" height="400"></canvas>
-
           </div>
+
+          <canvas id="canvas" class="collapsed" width="550" height="400"></canvas>
+
         </fieldset>
 
       </form>
 
-      <div class="report">
-        <div class="calculatedValues">
-          Vrednosti članova formule za SNR za odabrane parametre:
-          <ul>
-            <li>S<sub>sig</sub> = <span class="s_sig bold">0</span> e<sup>-</sup>/s</li>
-            <li>S<sub>sky</sub> = <span class="s_sky bold">0</span> e<sup>-</sup>/s/pix</li>
-            <li>S<sub>dc</sub> = <span class="s_dc bold">0</span> e<sup>-</sup>/s/pix</li>
-            <li>S<sub>ro</sub><sup>2</sup> = <span class="s_ro bold">0</span> e<sup>-</sup>/pix</li>
-            <li>n = <span class="n_pix bold">0</span> pix</li>
-          </ul>
-        </div>
+      <a href="#help" name="help" class="helpButton">Help</a>
+
+      <div class="help collapsed">
         <p>Iz izraza za SNR:</p>
         <img src="img/snr.png">
         <p>dobijamo izraz za vreme ekspozicije:</p>

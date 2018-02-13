@@ -152,6 +152,8 @@
       ctx.stroke();
       ctx.closePath();
 
+      this.graph.drawn = true;
+
     },
 
     drawHelpLines: function() {

@@ -1,40 +1,40 @@
 // Signal to noise equation
 \begin{align*}
-SNR &= \frac{S_{sig}t}{\sqrt{S_{sig} t+S_{sky}tn+S_{dc}tn+S_{ro}^{2}n}}
+\textrm{SNR} &= \frac{\textrm{S}_{\textrm{sig}}\textrm{t}}{\sqrt{\textrm{S}_{\textrm{sig}}\textrm{t+S}_{\textrm{sky}}\textrm{tn+S}_{\textrm{dc}}\textrm{tn+S}_{\textrm{ro}}^{\textrm{2}}\textrm{n}}}
 \end{align*}
 
 // exposure time
 \begin{align*}
-t &= \frac{SNR^{2}(S_{sig}+S_{sky}n+S_{dc}n)+\sqrt{SNR^{4}(S_{sig}+S_{sky}n+S_{dc}n)^{2}+4S_{sig}^{2}SNR^{2}S_{ro}^{2}n}}{2S_{sig}^{2}}
+\textrm{t} &= \frac{\textrm{SNR}^{2}(\textrm{S}_{\textrm{sig}}+\textrm{S}_{\textrm{sky}}\textrm{n+S}_{\textrm{dc}}\textrm{n})+\sqrt{\textrm{SNR}^{4}(\textrm{S}_{\textrm{sig}}+\textrm{S}_{\textrm{sky}}\textrm{n+S}_{\textrm{dc}}\textrm{n})^{2}+\textrm{4S}_{\textrm{sig}}^{2}\textrm{SNR}^{2}\textrm{S}_{\textrm{ro}}^{2}\textrm{n}}}{\textrm{2S}_{\textrm{sig}}^{2}}
 \end{align*}
 
 // number of pixels
 \begin{align*}
-n &= \pi(0,67\cdot\frac{seeing['']}{scale})^{2}
+\textrm{n} &= \pi(0,67\cdot\frac{\textrm{seeing}['']}{\textrm{scale}})^{2}
 \end{align*}
 
 // scale
 \begin{align*}
-scale &= \frac{206265\cdot pxSize[m]}{focalLength[m]}
+\textrm{scale} &= \frac{206265\cdot \textrm{pxSize}[\textrm{m}]}{\textrm{focalLength}[\textrm{m}]}
 \end{align*}
 
 // signal from the sky
 \begin{align*}
-S_{sky} = 10^{-\frac{mag_{s}}{2,5}} \cdot zeroMagnitudeFlux \\
-\cdot skyTransparency \\
-\cdot totalTransparency \\
-\cdot telescopeArea \\
-\cdot QE \\
-\cdot bandwidth \\
-\cdot scale
+\textrm{S}_{\textrm{sky}} = 10^{-\frac{\textrm{mag}_{\textrm{s}}}{2,5}} \cdot \textrm{zeroMagnitudeFlux} 
+\cdot \textrm{skyTransparency}
+\cdot \textrm{totalTransparency}
+\cdot \textrm{telescopeArea}
+\cdot \textrm{QE}
+\cdot \textrm{bandwidth}
+\cdot \textrm{scale}
 \end{align*}
 
 // signal from the object
 \begin{align*}
-S_{sig} = 10^{-\frac{mag}{2,5}} \cdot zeroMagnitudeFlux \\
-\cdot skyTransparency \\
-\cdot totalTransparency \\
-\cdot telescopeArea \\
-\cdot QE \\
-\cdot bandwidth
+\textrm{S}_{\textrm{sig}} = 10^{-\frac{\textrm{mag}}{2,5}} \cdot \textrm{zeroMagnitudeFlux}
+\cdot \textrm{skyTransparency}
+\cdot \textrm{totalTransparency}
+\cdot \textrm{telescopeArea}
+\cdot \textrm{QE}
+\cdot \textrm{bandwidth}
 \end{align*}

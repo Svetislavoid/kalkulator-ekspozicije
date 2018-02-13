@@ -10,7 +10,8 @@ window.addEventListener('load', function() {
       broj_podeokaY: 0,
       dataPointsNo: 200,
       podeokX: 45,
-      podeokY: 45
+      podeokY: 45,
+      drawn: false
     },
     eqParams: {
       sig: 0,
@@ -37,15 +38,18 @@ window.addEventListener('load', function() {
     telescope: {
       cassegrain: {
         diameter: 0.6,
-        focalLength: 6
+        focalLength: 6,
+        effectiveAreaCoef: 0.91
       },
       nasmyth: {
         diameter: 1.4,
-        focalLength: 11.2
+        focalLength: 11.2,
+        effectiveAreaCoef: 1
       },
       custom: {
         diameter: 0,
-        focalLength: 0
+        focalLength: 0,
+        effectiveAreaCoef: 1
       }
     },
     camera: {
@@ -151,6 +155,8 @@ window.addEventListener('load', function() {
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
       this.bindEvent('click', this.customBand, this.addCustomBand.bind(this));
       this.bindEvent('click', this.modalSubmit, this.submitCustomParams.bind(this));
+      this.bindEvent('click', this.showGraphCB, this.showGraph.bind(this));
+      this.bindEvent('click', this.helpButton, this.showHelp.bind(this));
     },
 
     bindEvent: function(event, target, callback) {
@@ -187,6 +193,7 @@ window.addEventListener('load', function() {
       this.filterParams.classList.remove("on");
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
+      this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
       this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
@@ -194,6 +201,14 @@ window.addEventListener('load', function() {
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
+    },
+
+    showGraph: function() {
+      this.showGraphCB.checked && this.graph.drawn ? this.canvas.classList.remove("collapsed"): this.canvas.classList.add("collapsed");
+    },
+
+    showHelp: function() {
+      this.help.classList.toggle("collapsed");
     },
 
 
@@ -209,6 +224,7 @@ window.addEventListener('load', function() {
       this.seeing = document.querySelector('.seeing');
       this.magnituda = document.querySelector('.magnituda');
       this.signal_to_noise = document.querySelector('.signal-to-noise');
+      this.showGraphCB = document.querySelector('.showGraph input');
 
       this.r_teleskop = document.querySelector('.r-teleskop');
       this.r_reducer = document.querySelector('.r-reducer');
@@ -227,6 +243,7 @@ window.addEventListener('load', function() {
 
       this.telescopeDiameter = document.querySelector('.telescopeDiameter');
       this.telescopeFocalLength = document.querySelector('.telescopeFocalLength');
+      this.telescopeEffectiveAreaCoef = document.querySelector('.telescopeEffectiveAreaCoef');
       this.ccdRO = document.querySelector('.ccdRO');
       this.ccdDC = document.querySelector('.ccdDC');
       this.ccdPixelSize = document.querySelector('.ccdPixelSize');
@@ -247,6 +264,8 @@ window.addEventListener('load', function() {
       this.customBand = document.querySelector('.customBand');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
+      this.helpButton = document.querySelector('.helpButton');
+      this.help = document.querySelector('.help');
 
       this.s_sig = document.querySelector('.s_sig');
       this.s_sky = document.querySelector('.s_sky');
@@ -299,7 +318,7 @@ window.addEventListener('load', function() {
         this.drawHelpLines();
         this.fillData();
         this.logger();
-        this.result.classList.remove("collapsed");
+        this.showGraphCB.checked ? this.canvas.classList.remove("collapsed"): this.canvas.classList.add("collapsed");
       }
     },
 
@@ -326,7 +345,7 @@ window.addEventListener('load', function() {
       // telescope focalLength
       this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*this.reducer.value);
       // unobstructed area of main mirror in m^2
-      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4);
+      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4)*this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].effectiveAreaCoef;
       // camera resolution
       this.eqParams.res = Number((this.eqParams.binning*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
@@ -524,6 +543,8 @@ window.addEventListener('load', function() {
 
       ctx.stroke();
       ctx.closePath();
+
+      this.graph.drawn = true;
 
     },
 

@@ -7,7 +7,8 @@
       broj_podeokaY: 0,
       dataPointsNo: 200,
       podeokX: 45,
-      podeokY: 45
+      podeokY: 45,
+      drawn: false
     },
     eqParams: {
       sig: 0,
@@ -34,15 +35,18 @@
     telescope: {
       cassegrain: {
         diameter: 0.6,
-        focalLength: 6
+        focalLength: 6,
+        effectiveAreaCoef: 0.91
       },
       nasmyth: {
         diameter: 1.4,
-        focalLength: 11.2
+        focalLength: 11.2,
+        effectiveAreaCoef: 1
       },
       custom: {
         diameter: 0,
-        focalLength: 0
+        focalLength: 0,
+        effectiveAreaCoef: 1
       }
     },
     camera: {

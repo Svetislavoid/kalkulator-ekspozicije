@@ -10,6 +10,7 @@
       this.seeing = document.querySelector('.seeing');
       this.magnituda = document.querySelector('.magnituda');
       this.signal_to_noise = document.querySelector('.signal-to-noise');
+      this.showGraphCB = document.querySelector('.showGraph input');
 
       this.r_teleskop = document.querySelector('.r-teleskop');
       this.r_reducer = document.querySelector('.r-reducer');
@@ -28,6 +29,7 @@
 
       this.telescopeDiameter = document.querySelector('.telescopeDiameter');
       this.telescopeFocalLength = document.querySelector('.telescopeFocalLength');
+      this.telescopeEffectiveAreaCoef = document.querySelector('.telescopeEffectiveAreaCoef');
       this.ccdRO = document.querySelector('.ccdRO');
       this.ccdDC = document.querySelector('.ccdDC');
       this.ccdPixelSize = document.querySelector('.ccdPixelSize');
@@ -48,6 +50,8 @@
       this.customBand = document.querySelector('.customBand');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
+      this.helpButton = document.querySelector('.helpButton');
+      this.help = document.querySelector('.help');
 
       this.s_sig = document.querySelector('.s_sig');
       this.s_sky = document.querySelector('.s_sky');

@@ -20,7 +20,7 @@
       // telescope focalLength
       this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*this.reducer.value);
       // unobstructed area of main mirror in m^2
-      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4);
+      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4)*this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].effectiveAreaCoef;
       // camera resolution
       this.eqParams.res = Number((this.eqParams.binning*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels

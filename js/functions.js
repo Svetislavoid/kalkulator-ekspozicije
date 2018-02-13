@@ -5,6 +5,8 @@
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
       this.bindEvent('click', this.customBand, this.addCustomBand.bind(this));
       this.bindEvent('click', this.modalSubmit, this.submitCustomParams.bind(this));
+      this.bindEvent('click', this.showGraphCB, this.showGraph.bind(this));
+      this.bindEvent('click', this.helpButton, this.showHelp.bind(this));
     },
 
     bindEvent: function(event, target, callback) {
@@ -41,6 +43,7 @@
       this.filterParams.classList.remove("on");
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
+      this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
       this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
@@ -48,4 +51,12 @@
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
+    },
+
+    showGraph: function() {
+      this.showGraphCB.checked && this.graph.drawn ? this.canvas.classList.remove("collapsed"): this.canvas.classList.add("collapsed");
+    },
+
+    showHelp: function() {
+      this.help.classList.toggle("collapsed");
     },

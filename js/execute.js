@@ -9,6 +9,6 @@
         this.drawHelpLines();
         this.fillData();
         this.logger();
-        this.result.classList.remove("collapsed");
+        this.showGraphCB.checked ? this.canvas.classList.remove("collapsed"): this.canvas.classList.add("collapsed");
       }
     },
