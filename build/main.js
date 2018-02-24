@@ -127,15 +127,15 @@ window.addEventListener('load', function() {
         fluxJY: 0,
         fluxPh: 0
       },
-      'Ha-kontinuum': {
+      'Red-continuum': {
         wavelength: 6452,
         bandwidth: 50,
         fluxJY: 0,
         fluxPh: 0
       },
       '[SII]': {
-        wavelength: 6726,
-        bandwidth: 50,
+        wavelength: 6718,
+        bandwidth: 35,
         fluxJY: 0,
         fluxPh: 0
       },
