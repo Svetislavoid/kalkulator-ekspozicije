@@ -39,7 +39,7 @@ window.addEventListener('load', function() {
       cassegrain: {
         diameter: 0.6,
         focalLength: 6,
-        effectiveAreaCoef: 0.91
+        effectiveAreaCoef: 1
       },
       nasmyth: {
         diameter: 1.4,
@@ -378,7 +378,7 @@ window.addEventListener('load', function() {
       // signal-to-moise ratio
       var snr = this.eqParams.snr;
 
-      this.eqParams.exposure = Number(((Math.pow(snr,2)*(sig+(sky+dc)*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+(sky+dc)*n),2)+4*Math.pow(sig*snr,2)*ro*n))/(2*Math.pow(sig,2))).toFixed(2));
+      this.eqParams.exposure = Number(((Math.pow(snr,2)*(sig+(sky+dc)*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+(sky+dc)*n),2)+4*Math.pow(sig*snr*ro,2)*n))/(2*Math.pow(sig,2))).toFixed(2));
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
       if (this.eqParams.exposure > 20) {

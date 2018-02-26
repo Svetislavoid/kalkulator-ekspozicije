@@ -36,7 +36,7 @@
       cassegrain: {
         diameter: 0.6,
         focalLength: 6,
-        effectiveAreaCoef: 0.91
+        effectiveAreaCoef: 1
       },
       nasmyth: {
         diameter: 1.4,
