@@ -38,3 +38,13 @@
 \cdot \textrm{QE}
 \cdot \textrm{bandwidth}
 \end{align*}
+
+// photon energy
+\begin{align*}
+\textrm{E} &= \frac{1,9878\cdot10^{-15}}{\lambda[\textrm{\AA}]}\textrm{J}
+\end{align*}
+
+// Jansky flux to photon flux
+\begin{align*}
+\textrm{F}[\frac{\textrm{photons}}{\textrm{s} \cdot \textrm{cm}^{2} \cdot \textrm{\AA}}] &= \frac{\textrm{F}[\textrm{Jy}]}{\lambda[\textrm{\AA}]} \cdot 1509,206158
+\end{align*}

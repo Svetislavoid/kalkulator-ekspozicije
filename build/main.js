@@ -536,7 +536,7 @@ window.addEventListener('load', function() {
 
       if (this.graph.upLimitX !== 0) {
         for (var t = 0; t <= this.graph.upLimitX; t+= this.graph.upLimitX/this.graph.dataPointsNo) {
-          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+ro*n);
+          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+ro*ro*n);
           ctx.lineTo(t*scaleX,snr*scaleY);
         }
       }
