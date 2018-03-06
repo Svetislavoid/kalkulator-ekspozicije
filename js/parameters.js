@@ -121,20 +121,20 @@
       'Ha': {
         wavelength: 6563,
         bandwidth: 50,
-        fluxJY: 0,
-        fluxPh: 0
+        fluxJY: 3631,
+        fluxPh: 834.9729635
       },
       'Red-continuum': {
         wavelength: 6452,
         bandwidth: 50,
-        fluxJY: 0,
-        fluxPh: 0
+        fluxJY: 3631,
+        fluxPh: 849.3378115
       },
       '[SII]': {
         wavelength: 6718,
         bandwidth: 35,
-        fluxJY: 0,
-        fluxPh: 0
+        fluxJY: 3631,
+        fluxPh: 815.708181
       },
       'custom': {
         wavelength: 0,
