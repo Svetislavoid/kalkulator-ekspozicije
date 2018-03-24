@@ -67,7 +67,7 @@
         this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
       }
       if (this.ccd.options[this.ccd.selectedIndex].text === 'Custom CCD') {
-        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc + 'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' + this.camera.custom.qe + ', pixel size = ' + this.camera.custom.pxSize*1000000 + '&#181;m)';
+        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc + 'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' + this.camera.custom.qe[0] + ', pixel size = ' + this.camera.custom.pxSize*1000000 + '&#181;m)';
       } else {
         this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
       }

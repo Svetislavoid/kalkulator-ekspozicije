@@ -47,7 +47,7 @@
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
       this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
-      this.camera.custom.qe = this.ccdQE.value/100;
+      this.camera.custom.qe[0] = this.ccdQE.value/100;
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
@@ -59,4 +59,17 @@
 
     showHelp: function() {
       this.help.classList.toggle("collapsed");
+    },
+
+    getQE: function(lambda, cameraQE) {
+      var diff = 999999999999;
+      var pos = 0;
+      Object.keys(cameraQE).map(function(key, index) {
+        if (Math.abs(lambda/10 - key) < diff) {
+          diff = Math.abs(lambda/10 - key);
+          pos = key;
+        }
+      });
+
+      return cameraQE[pos];
     },

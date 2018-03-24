@@ -29,6 +29,16 @@ module.exports = function(grunt) {
           dest: 'build/main.min.js'
         }]
       }
+    },
+    watch: {
+      css: {
+        files: ['css/*.css'],
+        tasks: ['concat:css'],
+      },
+      js: {
+        files: ['js/*.js'],
+        tasks: ['import_js'],
+      }
     }
   });
 
@@ -36,6 +46,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-import-js');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // register tasks
   // grunt.registerTask('concat-js', ['concat:js']);

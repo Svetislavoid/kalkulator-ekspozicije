@@ -4,7 +4,7 @@
       // read-out noise
       this.eqParams.ro = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].ro);
       // quantum efficiency
-      this.eqParams.qe = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
+      this.eqParams.qe = this.options.usePeakQE ? Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) : this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
       // pixel size
       this.eqParams.pxSize = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize);
       // binning
