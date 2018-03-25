@@ -3,14 +3,14 @@
       this.eqParams.dc = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc);
       // read-out noise
       this.eqParams.ro = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].ro);
-      // quantum efficiency
-      this.eqParams.qe = this.options.usePeakQE ? Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) : this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
       // pixel size
       this.eqParams.pxSize = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize);
       // binning
       this.eqParams.binning = Number(this.binning.value);
       // filter wavelength
       this.eqParams.wavelength = Number(this.band[this.filter.options[this.filter.selectedIndex].value].wavelength);
+      // quantum efficiency
+      this.eqParams.qe = this.options.usePeakQE ? Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) : this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
       // filter bandwidth
       this.eqParams.bandwidth = Number(this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth);
       // filter flux (photon/A/m^2/s)
