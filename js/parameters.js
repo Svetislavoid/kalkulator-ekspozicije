@@ -25,6 +25,7 @@
       skyTransparency: 0,
       totalTransparency: 0,
       pxSize: 0,
+      reducer: 1,
       binning: 1,
       focalLength: 0,
       area: 0,

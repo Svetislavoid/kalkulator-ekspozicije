@@ -2,7 +2,9 @@
       this.cacheDom();
       this.bindEvent('click', this.submit, this.execute.bind(this));
       this.bindEvent('click', this.customTelescope, this.addCustomTelescope.bind(this));
+      this.bindEvent('click', this.customReducer, this.addCustomReducer.bind(this));
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
+      this.bindEvent('click', this.customBinning, this.addCustomBinning.bind(this));
       this.bindEvent('click', this.customBand, this.addCustomBand.bind(this));
       this.bindEvent('click', this.modalSubmit, this.submitCustomParams.bind(this));
       this.bindEvent('click', this.showGraphCB, this.showGraph.bind(this));
@@ -23,9 +25,21 @@
       this.modal.classList.add("on");
     },
 
+    addCustomReducer: function() {
+      this.shadeScreen();
+      this.reducerParams.classList.add("on");
+      this.modal.classList.add("on");
+    },
+
     addCustomCCD: function() {
       this.shadeScreen();
       this.ccdParams.classList.add("on");
+      this.modal.classList.add("on");
+    },
+
+    addCustomBinning: function() {
+      this.shadeScreen();
+      this.binningParams.classList.add("on");
       this.modal.classList.add("on");
     },
 
@@ -39,15 +53,19 @@
       this.shadeScreen();
       this.modal.classList.remove("on");
       this.telescopeParams.classList.remove("on");
+      this.reducerParams.classList.remove("on");
       this.ccdParams.classList.remove("on");
+      this.binningParams.classList.remove("on");
       this.filterParams.classList.remove("on");
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
       this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
+      this.eqParams.reducer = Number(this.reducerValue.value);
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
       this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
       this.camera.custom.qe[0] = this.ccdQE.value/100;
+      this.eqParams.binning = Number(this.binningValue.value);
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;

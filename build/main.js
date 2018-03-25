@@ -28,6 +28,7 @@ window.addEventListener('load', function() {
       skyTransparency: 0,
       totalTransparency: 0,
       pxSize: 0,
+      reducer: 1,
       binning: 1,
       focalLength: 0,
       area: 0,
@@ -357,7 +358,9 @@ window.addEventListener('load', function() {
       this.cacheDom();
       this.bindEvent('click', this.submit, this.execute.bind(this));
       this.bindEvent('click', this.customTelescope, this.addCustomTelescope.bind(this));
+      this.bindEvent('click', this.customReducer, this.addCustomReducer.bind(this));
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
+      this.bindEvent('click', this.customBinning, this.addCustomBinning.bind(this));
       this.bindEvent('click', this.customBand, this.addCustomBand.bind(this));
       this.bindEvent('click', this.modalSubmit, this.submitCustomParams.bind(this));
       this.bindEvent('click', this.showGraphCB, this.showGraph.bind(this));
@@ -378,9 +381,21 @@ window.addEventListener('load', function() {
       this.modal.classList.add("on");
     },
 
+    addCustomReducer: function() {
+      this.shadeScreen();
+      this.reducerParams.classList.add("on");
+      this.modal.classList.add("on");
+    },
+
     addCustomCCD: function() {
       this.shadeScreen();
       this.ccdParams.classList.add("on");
+      this.modal.classList.add("on");
+    },
+
+    addCustomBinning: function() {
+      this.shadeScreen();
+      this.binningParams.classList.add("on");
       this.modal.classList.add("on");
     },
 
@@ -394,15 +409,19 @@ window.addEventListener('load', function() {
       this.shadeScreen();
       this.modal.classList.remove("on");
       this.telescopeParams.classList.remove("on");
+      this.reducerParams.classList.remove("on");
       this.ccdParams.classList.remove("on");
+      this.binningParams.classList.remove("on");
       this.filterParams.classList.remove("on");
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
       this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
+      this.eqParams.reducer = Number(this.reducerValue.value);
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
       this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
       this.camera.custom.qe[0] = this.ccdQE.value/100;
+      this.eqParams.binning = Number(this.binningValue.value);
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
@@ -462,10 +481,12 @@ window.addEventListener('load', function() {
       this.telescopeDiameter = document.querySelector('.telescopeDiameter');
       this.telescopeFocalLength = document.querySelector('.telescopeFocalLength');
       this.telescopeEffectiveAreaCoef = document.querySelector('.telescopeEffectiveAreaCoef');
+      this.reducerValue = document.querySelector('.reducerValue');
       this.ccdRO = document.querySelector('.ccdRO');
       this.ccdDC = document.querySelector('.ccdDC');
       this.ccdPixelSize = document.querySelector('.ccdPixelSize');
       this.ccdQE = document.querySelector('.ccdQE');
+      this.binningValue = document.querySelector('.binningValue');
       this.bandWavelength = document.querySelector('.bandWavelength');
       this.bandBandwidth = document.querySelector('.bandBandwidth');
       this.bandFlux = document.querySelector('.bandFlux');
@@ -474,11 +495,15 @@ window.addEventListener('load', function() {
       this.submit = document.querySelector('.submit');
       this.modal = document.querySelector('.modal');
       this.telescopeParams = document.querySelector('.telescopeParams');
+      this.reducerParams = document.querySelector('.reducerParams');
       this.ccdParams = document.querySelector('.ccdParams');
+      this.binningParams = document.querySelector('.binningParams');
       this.filterParams = document.querySelector('.filterParams');
       this.modalSubmit = document.querySelector('.modalSubmit');
       this.customTelescope = document.querySelector('.customTelescope');
+      this.customReducer = document.querySelector('.customReducer');
       this.customCCD = document.querySelector('.customCCD');
+      this.customBinning = document.querySelector('.customBinning');
       this.customBand = document.querySelector('.customBand');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
@@ -498,18 +523,27 @@ window.addEventListener('load', function() {
       } else {
         this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
       }
+      if (this.reducer.options[this.reducer.selectedIndex].text === 'Custom reducer') {
+        this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text + ' (' + this.eqParams.reducer + 'x)';
+      } else {
+        this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
+      }
       if (this.ccd.options[this.ccd.selectedIndex].text === 'Custom CCD') {
         this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc + 'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' + this.camera.custom.qe[0] + ', pixel size = ' + this.camera.custom.pxSize*1000000 + '&#181;m)';
       } else {
         this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
+      }
+      if (this.binning.options[this.binning.selectedIndex].text === 'Custom binning') {
+        this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text + ' (' + this.eqParams.binning + 'x' + this.eqParams.binning + ')';
+      } else {
+        this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
       }
       if (this.filter.options[this.filter.selectedIndex].text === 'Custom band') {
         this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text + ' (&#955; = ' + this.band.custom.wavelength + '&#8491;, &#916;&#955; = ' + this.band.custom.bandwidth + '&#8491;, F = ' + this.band.custom.fluxPh + 'photon/s/cm<sup>2</sup>/&#8491;)';
       } else {
         this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
       }
-      this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
-      this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
+
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
       this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
       this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
@@ -546,14 +580,12 @@ window.addEventListener('load', function() {
       this.eqParams.dc = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc);
       // read-out noise
       this.eqParams.ro = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].ro);
-      // quantum efficiency
-      this.eqParams.qe = this.options.usePeakQE ? Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) : this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
       // pixel size
       this.eqParams.pxSize = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize);
-      // binning
-      this.eqParams.binning = Number(this.binning.value);
       // filter wavelength
       this.eqParams.wavelength = Number(this.band[this.filter.options[this.filter.selectedIndex].value].wavelength);
+      // quantum efficiency
+      this.eqParams.qe = this.options.usePeakQE ? Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) : this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
       // filter bandwidth
       this.eqParams.bandwidth = Number(this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth);
       // filter flux (photon/A/m^2/s)
@@ -561,11 +593,11 @@ window.addEventListener('load', function() {
       // signal-to-noise
       this.eqParams.snr = Number(this.signal_to_noise.value);
       // telescope focalLength
-      this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*this.reducer.value);
+      this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*(this.reducer.value === 'custom' ? this.eqParams.reducer : this.reducer.value));
       // unobstructed area of main mirror in m^2
       this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4)*this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].effectiveAreaCoef;
       // camera resolution
-      this.eqParams.res = Number((this.eqParams.binning*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
+      this.eqParams.res = Number(((this.binning.value === 'custom' ? this.eqParams.binning : this.binning.value)*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
       this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
       // sky transparency

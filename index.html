@@ -23,6 +23,10 @@
           <label for="telescopeEffectiveAreaCoef">Effective area of main mirror (%):</label>
           <input class="telescopeEffectiveAreaCoef" type="text">
         </div>
+        <div class="reducerParams">
+          <label for="reducerValue">Reducer:</label>
+          <input class="reducerValue" type="text">
+        </div>
         <div class="ccdParams">
           <label for="ccdRO">CCD read-out noise (e<sup>-</sup>/pix):</label>
           <input class="ccdRO" type="text">
@@ -32,6 +36,10 @@
           <input class="ccdPixelSize" type="text">
           <label for="ccdQE">CCD peak QE (%):</label>
           <input class="ccdQE" type="text">
+        </div>
+        <div class="binningParams">
+          <label for="binningValue">Binning:</label>
+          <input class="binningValue" type="text">
         </div>
         <div class="filterParams">
           <label for="bandWavelength">Filter mean wavelength (&#8491;):</label>
@@ -63,6 +71,7 @@
               <select class="reducer" name="reducer">
                 <option value="1">none</option>
                 <option value="0.5">0.5x</option>
+                <option value="custom" class="customReducer">Custom reducer</option>
               </select>
             </div>
 
@@ -86,6 +95,7 @@
                 <option value="3">3x3</option>
                 <option value="4">4x4</option>
                 <option value="5">5x5</option>
+                <option value="custom" class="customBinning">Custom binning</option>
               </select>
             </div>
 

@@ -48,13 +48,17 @@
 }
 
 .telescopeParams,
+.reducerParams,
 .ccdParams,
+.binningParams,
 .filterParams {
   display: none;
 }
 
 .telescopeParams.on,
+.reducerParams.on,
 .ccdParams.on,
+.binningParams.on,
 .filterParams.on {
   display: block;
 }
