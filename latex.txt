@@ -15,7 +15,7 @@
 
 // scale
 \begin{align*}
-\textrm{scale} &= \frac{206265\cdot \textrm{pxSize}[\textrm{m}]}{\textrm{focalLength}[\textrm{m}]}
+\textrm{scale}\left[\frac{''}{\textrm{pix}}\right] &= \frac{206265['']\cdot \textrm{pxSize}[\textrm{m}]}{\textrm{focalLength}[\textrm{m}]}
 \end{align*}
 
 // signal from the sky
@@ -23,7 +23,7 @@
 \textrm{S}_{\textrm{sky}} = 10^{-\frac{\textrm{mag}_{\textrm{s}}}{2,5}} \cdot \textrm{zeroMagnitudeFlux} 
 \cdot \textrm{skyTransparency}
 \cdot \textrm{totalTransparency}
-\cdot \textrm{telescopeArea}
+\cdot \textrm{effectiveTelescopeArea}
 \cdot \textrm{QE}
 \cdot \textrm{bandwidth}
 \cdot \textrm{scale}
@@ -34,7 +34,7 @@
 \textrm{S}_{\textrm{sig}} = 10^{-\frac{\textrm{mag}}{2,5}} \cdot \textrm{zeroMagnitudeFlux}
 \cdot \textrm{skyTransparency}
 \cdot \textrm{totalTransparency}
-\cdot \textrm{telescopeArea}
+\cdot \textrm{effectiveTelescopeArea}
 \cdot \textrm{QE}
 \cdot \textrm{bandwidth}
 \end{align*}
