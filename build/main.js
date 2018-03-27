@@ -416,12 +416,12 @@ window.addEventListener('load', function() {
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
       this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
-      this.eqParams.reducer = Number(this.reducerValue.value);
+      this.eqParams.reducer = this.reducerValue.value ? Number(this.reducerValue.value) : 1;
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
       this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
       this.camera.custom.qe[0] = this.ccdQE.value/100;
-      this.eqParams.binning = Number(this.binningValue.value);
+      this.eqParams.binning = this.binningValue.value ? Number(this.binningValue.value) : 1;
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
