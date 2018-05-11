@@ -22,5 +22,6 @@
     "grunt-contrib-uglify": "^3.2.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-import-js": "^0.1.4"
-  }
+  },
+  "dependencies": {}
 }

@@ -5,7 +5,7 @@
       console.log("Filter: " + this.filter.options[this.filter.selectedIndex].text);
       // console.log("Opseg filtera: " + this.opseg_filtera.value);
       console.log("Transparentnost elemenata: " + this.transparentnost_elemenata.value);
-      console.log("Transparentnost neba: " + this.transparentnost_neba.value);
+      console.log("airmass: " + this.airmass.value);
       console.log("Sjaj neba: " + this.sjaj_neba.value);
       console.log("Seeing: " + this.seeing.value);
       console.log("Magnituda: " + this.magnituda.value);

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
 <html>
-    
+
   <head>
     <meta charset="UTF-8" />
       <title>Exposure time calculator</title>
       <link rel="stylesheet" type="text/css" href="build/main.css">
       <script type="text/javascript" src="build/main.js"></script>
   </head>
-    
+
   <body>
 
     <div class="screenShade"></div>
@@ -48,15 +48,25 @@
           <input class="bandBandwidth" type="text">
           <label for="bandFlux">Zero magnitude flux (photon/s/cm<sup>2</sup>/&#8491;):</label>
           <input class="bandFlux" type="text">
+          <label for="extinctionCoeff">Extinction coefficient (mag/airmass):</label>
+          <input class="extinctionCoeff" type="text">
         </div>
         <input type="button" class="btn modalSubmit" value="Ok">
       </div>
-            
+
       <form>
         <fieldset>
           <legend>Exposure time calculator</legend>
 
           <div class="form">
+            <div class="parameters">
+              <label for="object">Object:</label>
+              <select class="object" name="object">
+                <option value="point">Point</option>
+                <option value="extended">Extended</option>
+              </select>
+            </div>
+
             <div class="parameters">
               <label for="teleskop">Telescope:</label>
               <select class="teleskop" name="teleskop">
@@ -120,8 +130,8 @@
             </div>
 
             <div class="parameters">
-              <label for="transparentnost-neba">Sky transparency:</label>
-              <input class="transparentnost-neba" type="text">
+              <label for="airmass">Airmass:</label>
+              <input class="airmass" type="text">
             </div>
 
             <div class="parameters">
@@ -135,6 +145,11 @@
             </div>
 
             <div class="parameters">
+              <label for="aperture">Radius for photometry (arcsec):</label>
+              <input class="aperture" type="text">
+            </div>
+
+            <div class="parameters">
               <label for="magnituda">Magnitude:</label>
               <input class="magnituda" type="text">
             </div>
@@ -145,22 +160,24 @@
             </div>
 
             <p class="showGraph">Show graph <input type="checkbox" checked="checked" name="showGraph"></p>
-          
+
             <input type="button" class="btn submit" value="Calculate">
           </div>
 
           <div class="result">
 
             <section>
+              <p>Object: <span class="r-object bold"></span></p>
               <p>Telescope: <span class="r-teleskop bold"></span></p>
               <p>Reducer: <span class="r-reducer bold"></span></p>
               <p>CCD: <span class="r-ccd bold"></span></p>
               <p>CCD binning: <span class="r-binning bold"></span></p>
               <p>Band: <span class="r-filter bold"></span></p>
               <p>Total transparency on all optical elements: <span class="r-transparentnost bold"></span></p>
-              <p>Sky transparency: <span class="r-transparentnost-neba bold"></span></p>
+              <p>Airmass: <span class="r-airmass bold"></span></p>
               <p>Sky brightness (mag/arcsec<sup>2</sup>): <span class="r-sjaj-neba bold"></span></p>
               <p>Seeing (FWHM in arcsec): <span class="r-seeing bold"></span></p>
+              <p>Radius for photometry (arcsec): <span class="r-aperture bold"></span></p>
               <p>Magnitude: <span class="r-magnituda bold"></span></p>
               <p>S/N: <span class="r-signal-to-noise bold"></span></p>
               <p>Signal from the object: <span class="s_sig bold">0</span> e<sup>-</sup>/s</p>
@@ -193,7 +210,7 @@
         <p>In the form on the left, instruments currently available at the AS Vidojevica can be choosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the choosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.</p>
         <p>Calculator can also be used with some custom instruments and options, and not only those listed in the dropdown menus. In order to do that, choose 'Custom' option from the dropdown menu. Pop-up window will appear asking for custom instrument parameters.</p>
         <p>When using custom telescope, telescope effective area can be omitted, in which case a default value of 100% will be used.</p>
-        <p>When using custom CCD, to get the best results enter quantum efficiency of the CDD at wavelength that corresponds to the mean wavelength of a filter that is going to be used.</p>
+        <p>When using custom CCD, to get the best results enter quantum efficiency of the CCD at wavelength that corresponds to the mean wavelength of a filter that is going to be used.</p>
 
         <h4>Calculations</h4>
 
@@ -207,7 +224,7 @@
 
         <p>where S<sub>dc</sub> and S<sub>ro</sub> are camera dark current and read out noise values, respectively.</p>
 
-        <p>Counts from the object, counts from the sky and number of pixels accross which the object is spread are calculated as:</p>
+        <p>Counts from the object, counts from the sky and number of pixels in the aperture are calculated as:</p>
 
         <img src="img/objectSignal.png">
         <img src="img/skySignal.png">
@@ -222,7 +239,7 @@
       </div>
 
     </div>
-    
+
   </body>
 
 </html>

@@ -10,7 +10,7 @@
 
 // number of pixels
 \begin{align*}
-\textrm{n} &= \pi(0,67\cdot\frac{\textrm{seeing}['']}{\textrm{scale}})^{2}
+\textrm{n} &= \pi\left(\frac{\textrm{radius}['']}{\textrm{scale}}\right)^{2}
 \end{align*}
 
 // scale
@@ -20,8 +20,7 @@
 
 // signal from the sky
 \begin{align*}
-\textrm{S}_{\textrm{sky}} = 10^{-\frac{\textrm{mag}_{\textrm{s}}}{2,5}} \cdot \textrm{zeroMagnitudeFlux} 
-\cdot \textrm{skyTransparency}
+\textrm{S}_{\textrm{sky}} = 10^{-\frac{\textrm{mag}_{\textrm{s}}+\textrm{airmass*extCoeff}}{2,5}} \cdot \textrm{zeroMagnitudeFlux}
 \cdot \textrm{totalTransparency}
 \cdot \textrm{effectiveTelescopeArea}
 \cdot \textrm{QE}
@@ -31,8 +30,7 @@
 
 // signal from the object
 \begin{align*}
-\textrm{S}_{\textrm{sig}} = 10^{-\frac{\textrm{mag}}{2,5}} \cdot \textrm{zeroMagnitudeFlux}
-\cdot \textrm{skyTransparency}
+\textrm{S}_{\textrm{sig}} = 10^{-\frac{\textrm{mag+airmass*extCoeff}}{2,5}} \cdot \textrm{zeroMagnitudeFlux}
 \cdot \textrm{totalTransparency}
 \cdot \textrm{effectiveTelescopeArea}
 \cdot \textrm{QE}

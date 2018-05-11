@@ -25,7 +25,8 @@ window.addEventListener('load', function() {
       wavelength: 0,
       bandwidth: 0,
       fluxPh: 0,
-      skyTransparency: 0,
+      extinctCoeff: 0,
+      airmass: 0,
       totalTransparency: 0,
       pxSize: 0,
       reducer: 1,
@@ -301,55 +302,64 @@ window.addEventListener('load', function() {
         wavelength: 4450,
         bandwidth: 940,
         fluxJY: 4260,
-        fluxPh: 1444.762247191
+        fluxPh: 1444.762247191,
+        extinctCoeff: 0.4   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'V': {
         wavelength: 5510,
         bandwidth: 880,
         fluxJY: 3640,
-        fluxPh: 997.0032667877
+        fluxPh: 997.0032667877,
+        extinctCoeff: 0.2   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'R': {
         wavelength: 6580,
         bandwidth: 1380,
         fluxJY: 3080,
-        fluxPh: 706.4340425532
+        fluxPh: 706.4340425532,
+        extinctCoeff: 0.1   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'I': {
         wavelength: 8060,
         bandwidth: 1490,
         fluxJY: 2550,
-        fluxPh: 477.476426799
+        fluxPh: 477.476426799,
+        extinctCoeff: 0.08   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'L': {
         wavelength: 35000,
         bandwidth: 4720,
         fluxJY: 280,
-        fluxPh: 12.07364926
+        fluxPh: 12.07364926,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       'Ha': {
         wavelength: 6563,
         bandwidth: 50,
         fluxJY: 3631,
-        fluxPh: 834.9729635
+        fluxPh: 834.9729635,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       'Red-continuum': {
         wavelength: 6452,
         bandwidth: 50,
         fluxJY: 3631,
-        fluxPh: 849.3378115
+        fluxPh: 849.3378115,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       '[SII]': {
         wavelength: 6718,
         bandwidth: 35,
         fluxJY: 3631,
-        fluxPh: 815.708181
+        fluxPh: 815.708181,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       'custom': {
         wavelength: 0,
         bandwidth: 0,
         fluxJY: 0,
-        fluxPh: 0
+        fluxPh: 0,
+        extinctCoeff: 0
       }
     },
 
@@ -425,6 +435,7 @@ window.addEventListener('load', function() {
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
+      this.band.custom.extinctCoeff = this.extinctionCoeff.value;
     },
 
     showGraph: function() {
@@ -448,36 +459,163 @@ window.addEventListener('load', function() {
       return cameraQE[pos];
     },
 
+    // Error function
+    erf: function(x) {
+      // erf(x) = 2/sqrt(pi) * integrate(from=0, to=x, e^-(t^2) ) dt
+      // with using Taylor expansion,
+      //        = 2/sqrt(pi) * sigma(n=0 to +inf, ((-1)^n * x^(2n+1))/(n! * (2n+1)))
+      // calculationg n=0 to 50
+      var m = 1.00;
+      var s = 1.00;
+      var sum = x * 1.0;
+
+      for(var i = 1; i < 50; i++){
+        m *= i;
+        s *= -1;
+        sum += (s * Math.pow(x, 2.0 * i + 1.0)) / (m * (2.0 * i + 1.0));
+      }
+      return 2 * sum / Math.sqrt(Math.PI);
+    },
+
+    // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). We calculate the fraction of that light which falls within an aperture of radius given by second argument (with units of arcsec).
+    fraction_inside: function(fwhm, radius) {
+
+      var sigma;
+      var z;
+      var x1, x2;
+      var large;
+      var ratio;
+
+      large = 1000.0;
+
+      // calculate how far out the "radius" is in units of "sigmas"
+      sigma = fwhm/2.35;
+      z = radius/(sigma*1.414);
+
+      // now, we assume that a radius of "large" is effectively infinite
+      x1 = this.erf(z);
+      ratio = (x1*x1);
+
+      return(ratio);
+    },
+
+    // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). This function goes to the trouble of calculating how much of the light falls within fractional pixels defined by the given radius of a synthetic aperture.  It is slow but more accurate than the "fraction_inside" function.
+
+    fraction_inside_slow: function(fwhm, radius, pixsize) {
+
+      var i, j, k, l;
+      var max_pix_rad;
+      var sigma2;
+      var x, y;
+      var fx, fy;
+      var psf_center_x, psf_center_y;
+      var ratio;
+      var bit;
+      var this_bit;
+      var pix_sum;
+      var all_sum;
+      var rad_sum;
+      var rad2, radius2;
+      var inten;
+      var piece;
+
+      // how many pieces do we sub-divide pixels into?
+      piece = 20;
+
+      // rescale FWHM and aperture radius into pixels (instead of arcsec)
+      fwhm /= pixsize;
+      radius /= pixsize;
+
+      max_pix_rad = 30;
+
+      // check to make sure user isn't exceeding our built-in limits
+      if (radius >= max_pix_rad) {
+        console.log('Warning: radius exceeds limit of ' + max_pix_rad);
+      }
+
+      // these values control the placement of the star on the pixel grid:
+      //    (0,0) to make the star centered on a junction of four pixels
+      //    (0.5, 0.5) to make star centered on one pixel
+      psf_center_x = 0.5;
+      psf_center_y = 0.5;
+
+      sigma2 = fwhm / 2.35;
+      sigma2 = sigma2*sigma2;
+      radius2 = radius*radius;
+      bit = 1.0/piece;
+
+      rad_sum = 0;
+      all_sum = 0;
+
+      for (i = 0 - max_pix_rad; i < max_pix_rad; i++) {
+        for (j = 0 - max_pix_rad; j < max_pix_rad; j++) {
+
+          // now, how much light falls into pixel (i, j)?
+          pix_sum = 0;
+          for (k = 0; k < piece; k++) {
+
+            x = (i - psf_center_x) + (k + 0.5)*bit;
+            fx = Math.exp(-(x*x)/(2.0*sigma2));
+
+            for (l = 0; l < piece; l++) {
+
+              y = (j - psf_center_y) + (l + 0.5)*bit;
+              fy = Math.exp(-(y*y)/(2.0*sigma2));
+
+              inten = fx*fy;
+              this_bit = inten*bit*bit;
+              pix_sum += this_bit;
+
+              rad2 = x*x + y*y;
+              if (rad2 <= radius2) {
+                rad_sum += this_bit;
+              }
+            }
+          }
+          all_sum += pix_sum;
+        }
+      }
+
+      ratio = rad_sum / all_sum;
+
+      return(ratio);
+    },
+
 
     cacheDom: function() {
+      this.object = document.querySelector('.object');
       this.teleskop = document.querySelector('.teleskop');
       this.reducer = document.querySelector('.reducer');
       this.ccd = document.querySelector('.ccd');
       this.binning = document.querySelector('.binning');
       this.filter = document.querySelector('.filter');
       this.transparentnost_elemenata = document.querySelector('.transparentnost');
-      this.transparentnost_neba = document.querySelector('.transparentnost-neba');
+      this.airmass = document.querySelector('.airmass');
       this.sjaj_neba = document.querySelector('.sjaj-neba');
       this.seeing = document.querySelector('.seeing');
+      this.aperture = document.querySelector('.aperture');
       this.magnituda = document.querySelector('.magnituda');
       this.signal_to_noise = document.querySelector('.signal-to-noise');
       this.showGraphCB = document.querySelector('.showGraph input');
 
+      this.r_object = document.querySelector('.r-object');
       this.r_teleskop = document.querySelector('.r-teleskop');
       this.r_reducer = document.querySelector('.r-reducer');
       this.r_ccd = document.querySelector('.r-ccd');
       this.r_binning = document.querySelector('.r-binning');
       this.r_filter = document.querySelector('.r-filter');
       this.r_transparentnost_elemenata = document.querySelector('.r-transparentnost');
-      this.r_transparentnost_neba = document.querySelector('.r-transparentnost-neba');
+      this.r_airmass = document.querySelector('.r-airmass');
       this.r_sjaj_neba = document.querySelector('.r-sjaj-neba');
       this.r_seeing = document.querySelector('.r-seeing');
+      this.r_aperture = document.querySelector('.r-aperture');
       this.r_magnituda = document.querySelector('.r-magnituda');
       this.r_signal_to_noise = document.querySelector('.r-signal-to-noise');
 
       this.ekspozicija = document.querySelector('.ekspozicija span');
       this.canvas = document.querySelector('#canvas');
 
+      // Podaci iz modala (custom polja)
       this.telescopeDiameter = document.querySelector('.telescopeDiameter');
       this.telescopeFocalLength = document.querySelector('.telescopeFocalLength');
       this.telescopeEffectiveAreaCoef = document.querySelector('.telescopeEffectiveAreaCoef');
@@ -490,6 +628,7 @@ window.addEventListener('load', function() {
       this.bandWavelength = document.querySelector('.bandWavelength');
       this.bandBandwidth = document.querySelector('.bandBandwidth');
       this.bandFlux = document.querySelector('.bandFlux');
+      this.extinctionCoeff = document.querySelector('.extinctionCoeff');
 
       this.screenShade = document.querySelector('.screenShade');
       this.submit = document.querySelector('.submit');
@@ -544,10 +683,12 @@ window.addEventListener('load', function() {
         this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
       }
 
+      this.r_object.innerHTML = this.object.options[this.object.selectedIndex].text;
       this.r_transparentnost_elemenata.innerHTML = this.transparentnost_elemenata.value;
-      this.r_transparentnost_neba.innerHTML = this.transparentnost_neba.value;
+      this.r_airmass.innerHTML = this.airmass.value;
       this.r_sjaj_neba.innerHTML = this.sjaj_neba.value;
       this.r_seeing.innerHTML = this.seeing.value;
+      this.r_aperture.innerHTML = this.aperture.value;
       this.r_magnituda.innerHTML = this.magnituda.value;
       this.r_signal_to_noise.innerHTML = this.signal_to_noise.value;
 
@@ -590,6 +731,8 @@ window.addEventListener('load', function() {
       this.eqParams.bandwidth = Number(this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth);
       // filter flux (photon/A/m^2/s)
       this.eqParams.fluxPh = Number(this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh*10000);
+      // filter extinction coefficient (mag/airmass)
+      this.eqParams.extinctCoeff = Number(this.band[this.filter.options[this.filter.selectedIndex].value].extinctCoeff);
       // signal-to-noise
       this.eqParams.snr = Number(this.signal_to_noise.value);
       // telescope focalLength
@@ -599,9 +742,14 @@ window.addEventListener('load', function() {
       // camera resolution
       this.eqParams.res = Number(((this.binning.value === 'custom' ? this.eqParams.binning : this.binning.value)*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
-      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
+      if (this.object.value == 'point') {
+        // this.eqParams.n = Number((Math.pow(0.67*this.aperture.value/this.eqParams.res,2)*Math.PI).toFixed(2)); // ova formula bi trebalo da daje tačniju vrednost ali svi drugi kalkulatori koriste donju formulu pa ćemo i mi
+        this.eqParams.n = Number((Math.pow(this.aperture.value/this.eqParams.res,2)*Math.PI).toFixed(2));
+      } else {
+        this.eqParams.n = 1;
+      }
       // sky transparency
-      this.eqParams.skyTransparency = Number(this.transparentnost_neba.value);
+      this.eqParams.airmass = Number(this.airmass.value);
       // total transparency on all optical elements
       this.eqParams.totalTransparency = Number(this.transparentnost_elemenata.value);
       // object magnitude
@@ -609,9 +757,13 @@ window.addEventListener('load', function() {
       // sky magnitude
       this.eqParams.skyMag = Number(this.sjaj_neba.value);
       // signal
-      this.eqParams.sig = Number(Math.pow(10, -1*this.eqParams.mag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth);
-      // sky
-      this.eqParams.sky = Number(Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
+      if (this.object.value == 'point') {
+        this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+      } else {
+        this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2)*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+      }
+      // sky (========== NISAM SIGURAN DA LI OVDE TREBA KORIGOVATI MAGNITUDU NEBA ZA EKSTINKCIJU =============)
+      this.eqParams.sky = Number(Math.pow(10, -1*(this.eqParams.skyMag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
     },
 
     calculateExposure: function() {
@@ -832,7 +984,7 @@ window.addEventListener('load', function() {
       console.log("Filter: " + this.filter.options[this.filter.selectedIndex].text);
       // console.log("Opseg filtera: " + this.opseg_filtera.value);
       console.log("Transparentnost elemenata: " + this.transparentnost_elemenata.value);
-      console.log("Transparentnost neba: " + this.transparentnost_neba.value);
+      console.log("airmass: " + this.airmass.value);
       console.log("Sjaj neba: " + this.sjaj_neba.value);
       console.log("Seeing: " + this.seeing.value);
       console.log("Magnituda: " + this.magnituda.value);

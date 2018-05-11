@@ -13,6 +13,8 @@
       this.eqParams.bandwidth = Number(this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth);
       // filter flux (photon/A/m^2/s)
       this.eqParams.fluxPh = Number(this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh*10000);
+      // filter extinction coefficient (mag/airmass)
+      this.eqParams.extinctCoeff = Number(this.band[this.filter.options[this.filter.selectedIndex].value].extinctCoeff);
       // signal-to-noise
       this.eqParams.snr = Number(this.signal_to_noise.value);
       // telescope focalLength
@@ -22,9 +24,14 @@
       // camera resolution
       this.eqParams.res = Number(((this.binning.value === 'custom' ? this.eqParams.binning : this.binning.value)*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
       // number of pixels
-      this.eqParams.n = Number((Math.pow(0.67*this.seeing.value/this.eqParams.res,2)*Math.PI).toFixed(2));
+      if (this.object.value == 'point') {
+        // this.eqParams.n = Number((Math.pow(0.67*this.aperture.value/this.eqParams.res,2)*Math.PI).toFixed(2)); // ova formula bi trebalo da daje tačniju vrednost ali svi drugi kalkulatori koriste donju formulu pa ćemo i mi
+        this.eqParams.n = Number((Math.pow(this.aperture.value/this.eqParams.res,2)*Math.PI).toFixed(2));
+      } else {
+        this.eqParams.n = 1;
+      }
       // sky transparency
-      this.eqParams.skyTransparency = Number(this.transparentnost_neba.value);
+      this.eqParams.airmass = Number(this.airmass.value);
       // total transparency on all optical elements
       this.eqParams.totalTransparency = Number(this.transparentnost_elemenata.value);
       // object magnitude
@@ -32,9 +39,13 @@
       // sky magnitude
       this.eqParams.skyMag = Number(this.sjaj_neba.value);
       // signal
-      this.eqParams.sig = Number(Math.pow(10, -1*this.eqParams.mag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth);
-      // sky
-      this.eqParams.sky = Number(Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.skyTransparency*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
+      if (this.object.value == 'point') {
+        this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+      } else {
+        this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2)*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+      }
+      // sky (========== NISAM SIGURAN DA LI OVDE TREBA KORIGOVATI MAGNITUDU NEBA ZA EKSTINKCIJU =============)
+      this.eqParams.sky = Number(Math.pow(10, -1*(this.eqParams.skyMag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
     },
 
     calculateExposure: function() {

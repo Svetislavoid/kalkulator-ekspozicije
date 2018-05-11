@@ -22,7 +22,8 @@
       wavelength: 0,
       bandwidth: 0,
       fluxPh: 0,
-      skyTransparency: 0,
+      extinctCoeff: 0,
+      airmass: 0,
       totalTransparency: 0,
       pxSize: 0,
       reducer: 1,
@@ -298,54 +299,63 @@
         wavelength: 4450,
         bandwidth: 940,
         fluxJY: 4260,
-        fluxPh: 1444.762247191
+        fluxPh: 1444.762247191,
+        extinctCoeff: 0.4   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'V': {
         wavelength: 5510,
         bandwidth: 880,
         fluxJY: 3640,
-        fluxPh: 997.0032667877
+        fluxPh: 997.0032667877,
+        extinctCoeff: 0.2   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'R': {
         wavelength: 6580,
         bandwidth: 1380,
         fluxJY: 3080,
-        fluxPh: 706.4340425532
+        fluxPh: 706.4340425532,
+        extinctCoeff: 0.1   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'I': {
         wavelength: 8060,
         bandwidth: 1490,
         fluxJY: 2550,
-        fluxPh: 477.476426799
+        fluxPh: 477.476426799,
+        extinctCoeff: 0.08   // mag/airmass - TREBA PROVERITI VREDNOST
       },
       'L': {
         wavelength: 35000,
         bandwidth: 4720,
         fluxJY: 280,
-        fluxPh: 12.07364926
+        fluxPh: 12.07364926,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       'Ha': {
         wavelength: 6563,
         bandwidth: 50,
         fluxJY: 3631,
-        fluxPh: 834.9729635
+        fluxPh: 834.9729635,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       'Red-continuum': {
         wavelength: 6452,
         bandwidth: 50,
         fluxJY: 3631,
-        fluxPh: 849.3378115
+        fluxPh: 849.3378115,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       '[SII]': {
         wavelength: 6718,
         bandwidth: 35,
         fluxJY: 3631,
-        fluxPh: 815.708181
+        fluxPh: 815.708181,
+        extinctCoeff: 1   // NEMAM PODATAK
       },
       'custom': {
         wavelength: 0,
         bandwidth: 0,
         fluxJY: 0,
-        fluxPh: 0
+        fluxPh: 0,
+        extinctCoeff: 0
       }
     },

@@ -1,0 +1,22 @@
+1. Sky transparency prebaciti u airmass i dodati polje za upis vrednosti promene magnitude po jedinici airmass-e (staviti default vrednost) - ili računati airmass preko z
+2. Izbaciti polje Transparency on all optical elements - odrediti smanjenje fluksa direktno preko parametara instrumenata (refleksivnost ogledala, propusnost filtera itd - pogledati koji su sve - Mirametrics)
+3. Uzeti u obzir procenata fluksa koji upada u aperturu (pogledati growth curve), ubaciti i polje za aperturu
+4. Ubaciti polje za tip objekta (spread, point) i videti koja je razlika u izračunavanju
+
+    Imaging, extended source:
+    N is number of object photons/arcsec^2
+    S is number of sky photons per pixel
+
+    N = Nobj * BAND * (arcsec/pixel)^2
+    S = Nsky * BAND * (arcsec/pixel)^2
+    P = 1 // broj piksela n
+
+5. Pogledati koja je razlika u računu između fotometrije i spektroskopije (možda samo prisustvo rešetke u spektroskopiji tj. njena transparentnost)
+6. Izbaciti alert prozore ako neko polje nije popunjeno ili je loše popunjeno
+
+Direct imaging manual for Kitt Peak - objašnjenje zašto se množi fwhm sa 0.67
+
+Pitanja:
+
+1. Kolika je ekstinkcija po airmass-i za filtere?
+2. Da li treba korigovati magnitudu neba za uticaj ekstinkcije?
