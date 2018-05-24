@@ -331,28 +331,28 @@ window.addEventListener('load', function() {
         bandwidth: 4720,
         fluxJY: 280,
         fluxPh: 12.07364926,
-        extinctCoeff: 1   // NEMAM PODATAK
+        extinctCoeff: 0   // NEMAM PODATAK
       },
       'Ha': {
         wavelength: 6563,
         bandwidth: 50,
         fluxJY: 3631,
         fluxPh: 834.9729635,
-        extinctCoeff: 1   // NEMAM PODATAK
+        extinctCoeff: 0   // NEMAM PODATAK
       },
       'Red-continuum': {
         wavelength: 6452,
         bandwidth: 50,
         fluxJY: 3631,
         fluxPh: 849.3378115,
-        extinctCoeff: 1   // NEMAM PODATAK
+        extinctCoeff: 0   // NEMAM PODATAK
       },
       '[SII]': {
         wavelength: 6718,
         bandwidth: 35,
         fluxJY: 3631,
         fluxPh: 815.708181,
-        extinctCoeff: 1   // NEMAM PODATAK
+        extinctCoeff: 0   // NEMAM PODATAK
       },
       'custom': {
         wavelength: 0,
