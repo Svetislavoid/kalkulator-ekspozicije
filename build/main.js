@@ -762,8 +762,8 @@ window.addEventListener('load', function() {
       } else {
         this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2)*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
       }
-      // sky (========== NISAM SIGURAN DA LI OVDE TREBA KORIGOVATI MAGNITUDU NEBA ZA EKSTINKCIJU =============)
-      this.eqParams.sky = Number(Math.pow(10, -1*(this.eqParams.skyMag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
+      // sky (========== MAGNITUDA NEBA SE NE KORIGUJE ZA EKSTINKCIJU =============)
+      this.eqParams.sky = Number(Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
     },
 
     calculateExposure: function() {
