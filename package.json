@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Svetislavoid/kalkulator-ekspozicije#readme",
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^3.2.1",
     "grunt-contrib-watch": "^1.1.0",
