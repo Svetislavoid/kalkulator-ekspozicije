@@ -145,8 +145,12 @@
       return(ratio);
     },
 
-    // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). This function goes to the trouble of calculating how much of the light falls within fractional pixels defined by the given radius of a synthetic aperture.  It is slow but more accurate than the "fraction_inside" function.
-
+    // Figure out what fraction of a star's light falls within the aperture.
+    // We assume that the starlight has a circular gaussian distribution with
+    // FWHM given by the first argument (with units of arcsec). This function
+    // goes to the trouble of calculating how much of the light falls within
+    // fractional pixels defined by the given radius of a synthetic aperture.
+    // It is slow but more accurate than the "fraction_inside" function.
     fraction_inside_slow: function(fwhm, radius, pixsize) {
       var i, j, k, l;
       var max_pix_rad;
