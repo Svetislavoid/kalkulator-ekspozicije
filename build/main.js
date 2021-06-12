@@ -1,5 +1,4 @@
 window.addEventListener('load', function() {
-
   var kalkulator = {
     options: {
       usePeakQE: false
@@ -425,13 +424,19 @@ window.addEventListener('load', function() {
       this.filterParams.classList.remove("on");
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
-      this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
-      this.eqParams.reducer = this.reducerValue.value ? Number(this.reducerValue.value) : 1;
+      this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ?
+                                                this.telescopeEffectiveAreaCoef.value / 100 :
+                                                1;
+      this.eqParams.reducer = this.reducerValue.value ?
+                              Number(this.reducerValue.value) :
+                              1;
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
-      this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
-      this.camera.custom.qe[0] = this.ccdQE.value/100;
-      this.eqParams.binning = this.binningValue.value ? Number(this.binningValue.value) : 1;
+      this.camera.custom.pxSize = this.ccdPixelSize.value / 1000000;
+      this.camera.custom.qe[0] = this.ccdQE.value / 100;
+      this.eqParams.binning = this.binningValue.value ?
+                              Number(this.binningValue.value) :
+                              1;
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
@@ -439,7 +444,9 @@ window.addEventListener('load', function() {
     },
 
     showGraph: function() {
-      this.showGraphCB.checked && this.graph.drawn ? this.canvas.classList.remove("collapsed"): this.canvas.classList.add("collapsed");
+      this.showGraphCB.checked && this.graph.drawn ?
+      this.canvas.classList.remove("collapsed") :
+      this.canvas.classList.add("collapsed");
     },
 
     showHelp: function() {
@@ -449,9 +456,10 @@ window.addEventListener('load', function() {
     getQE: function(lambda, cameraQE) {
       var diff = 999999999999;
       var pos = 0;
+
       Object.keys(cameraQE).map(function(key, index) {
-        if (Math.abs(lambda/10 - key) < diff) {
-          diff = Math.abs(lambda/10 - key);
+        if (Math.abs(lambda / 10 - key) < diff) {
+          diff = Math.abs(lambda / 10 - key);
           pos = key;
         }
       });
@@ -464,7 +472,7 @@ window.addEventListener('load', function() {
       // erf(x) = 2/sqrt(pi) * integrate(from=0, to=x, e^-(t^2) ) dt
       // with using Taylor expansion,
       //        = 2/sqrt(pi) * sigma(n=0 to +inf, ((-1)^n * x^(2n+1))/(n! * (2n+1)))
-      // calculationg n=0 to 50
+      // calculating n=0 to 50
       var m = 1.00;
       var s = 1.00;
       var sum = x * 1.0;
@@ -477,9 +485,12 @@ window.addEventListener('load', function() {
       return 2 * sum / Math.sqrt(Math.PI);
     },
 
-    // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). We calculate the fraction of that light which falls within an aperture of radius given by second argument (with units of arcsec).
+    // Figure out what fraction of a star's light falls within the aperture.
+    // We assume that the starlight has a circular gaussian distribution with
+    // FWHM given by the first argument (with units of arcsec). We calculate
+    // the fraction of that light which falls within an aperture of radius
+    // given by second argument (with units of arcsec).
     fraction_inside: function(fwhm, radius) {
-
       var sigma;
       var z;
       var x1, x2;
@@ -489,12 +500,12 @@ window.addEventListener('load', function() {
       large = 1000.0;
 
       // calculate how far out the "radius" is in units of "sigmas"
-      sigma = fwhm/2.35;
-      z = radius/(sigma*1.414);
+      sigma = fwhm / 2.35;
+      z = radius / (sigma * 1.414);
 
       // now, we assume that a radius of "large" is effectively infinite
       x1 = this.erf(z);
-      ratio = (x1*x1);
+      ratio = (x1 * x1);
 
       return(ratio);
     },
@@ -502,7 +513,6 @@ window.addEventListener('load', function() {
     // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). This function goes to the trouble of calculating how much of the light falls within fractional pixels defined by the given radius of a synthetic aperture.  It is slow but more accurate than the "fraction_inside" function.
 
     fraction_inside_slow: function(fwhm, radius, pixsize) {
-
       var i, j, k, l;
       var max_pix_rad;
       var sigma2;
@@ -540,9 +550,9 @@ window.addEventListener('load', function() {
       psf_center_y = 0.5;
 
       sigma2 = fwhm / 2.35;
-      sigma2 = sigma2*sigma2;
-      radius2 = radius*radius;
-      bit = 1.0/piece;
+      sigma2 = sigma2 * sigma2;
+      radius2 = radius * radius;
+      bit = 1.0 / piece;
 
       rad_sum = 0;
       all_sum = 0;
@@ -554,19 +564,19 @@ window.addEventListener('load', function() {
           pix_sum = 0;
           for (k = 0; k < piece; k++) {
 
-            x = (i - psf_center_x) + (k + 0.5)*bit;
-            fx = Math.exp(-(x*x)/(2.0*sigma2));
+            x = (i - psf_center_x) + (k + 0.5) * bit;
+            fx = Math.exp(-(x * x) / (2.0 * sigma2));
 
             for (l = 0; l < piece; l++) {
 
-              y = (j - psf_center_y) + (l + 0.5)*bit;
-              fy = Math.exp(-(y*y)/(2.0*sigma2));
+              y = (j - psf_center_y) + (l + 0.5) * bit;
+              fy = Math.exp(-(y * y) / (2.0 * sigma2));
 
-              inten = fx*fy;
-              this_bit = inten*bit*bit;
+              inten = fx * fy;
+              this_bit = inten * bit * bit;
               pix_sum += this_bit;
 
-              rad2 = x*x + y*y;
+              rad2 = x * x + y * y;
               if (rad2 <= radius2) {
                 rad_sum += this_bit;
               }
@@ -719,68 +729,96 @@ window.addEventListener('load', function() {
     getFnValues: function() {
       // dark current
       this.eqParams.dc = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].dc);
+
       // read-out noise
       this.eqParams.ro = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].ro);
+
       // pixel size
       this.eqParams.pxSize = Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].pxSize);
+
       // filter wavelength
       this.eqParams.wavelength = Number(this.band[this.filter.options[this.filter.selectedIndex].value].wavelength);
+
       // quantum efficiency
-      this.eqParams.qe = this.options.usePeakQE ? Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) : this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
+      this.eqParams.qe = this.options.usePeakQE ?
+                          Number(this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe[0]) :
+                          this.getQE(this.eqParams.wavelength, this.camera[this.ccd.options[this.ccd.selectedIndex].value].qe);
+
       // filter bandwidth
       this.eqParams.bandwidth = Number(this.band[this.filter.options[this.filter.selectedIndex].value].bandwidth);
+
       // filter flux (photon/A/m^2/s)
-      this.eqParams.fluxPh = Number(this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh*10000);
+      this.eqParams.fluxPh = Number(this.band[this.filter.options[this.filter.selectedIndex].value].fluxPh * 10000);
+
       // filter extinction coefficient (mag/airmass)
       this.eqParams.extinctCoeff = Number(this.band[this.filter.options[this.filter.selectedIndex].value].extinctCoeff);
+
       // signal-to-noise
       this.eqParams.snr = Number(this.signal_to_noise.value);
+
       // telescope focalLength
-      this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength*(this.reducer.value === 'custom' ? this.eqParams.reducer : this.reducer.value));
+      this.eqParams.focalLength = Number(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].focalLength *
+                                  (this.reducer.value === 'custom' ? this.eqParams.reducer : this.reducer.value));
+
       // unobstructed area of main mirror in m^2
-      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter,2)*Math.PI/4)*this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].effectiveAreaCoef;
+      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter, 2) * Math.PI/4) *
+                            this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].effectiveAreaCoef;
+
       // camera resolution
-      this.eqParams.res = Number(((this.binning.value === 'custom' ? this.eqParams.binning : this.binning.value)*this.eqParams.pxSize*206265/this.eqParams.focalLength).toFixed(2));
+      this.eqParams.res = Number(((this.binning.value === 'custom' ? this.eqParams.binning : this.binning.value) *
+                          this.eqParams.pxSize * 206265 / this.eqParams.focalLength).toFixed(2));
+
       // number of pixels
       if (this.object.value == 'point') {
-        // this.eqParams.n = Number((Math.pow(0.67*this.aperture.value/this.eqParams.res,2)*Math.PI).toFixed(2)); // ova formula bi trebalo da daje tačniju vrednost ali svi drugi kalkulatori koriste donju formulu pa ćemo i mi
-        this.eqParams.n = Number((Math.pow(this.aperture.value/this.eqParams.res,2)*Math.PI).toFixed(2));
+        // this.eqParams.n = Number((Math.pow(0.67 * this.aperture.value / this.eqParams.res, 2) * Math.PI).toFixed(2)); // ova formula bi trebalo da daje tačniju vrednost ali svi drugi kalkulatori koriste donju formulu pa ćemo i mi
+        this.eqParams.n = Number((Math.pow(this.aperture.value/this.eqParams.res, 2) * Math.PI).toFixed(2));
       } else {
         this.eqParams.n = 1;
       }
+
       // sky transparency
       this.eqParams.airmass = Number(this.airmass.value);
+
       // total transparency on all optical elements
       this.eqParams.totalTransparency = Number(this.transparentnost_elemenata.value);
+
       // object magnitude
       this.eqParams.mag = Number(this.magnituda.value);
+
       // sky magnitude
       this.eqParams.skyMag = Number(this.sjaj_neba.value);
+
       // signal
       if (this.object.value == 'point') {
-        this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+        this.eqParams.sig = Number(Math.pow(10, -1 * (this.eqParams.mag + this.eqParams.airmass * this.eqParams.extinctCoeff) / 2.5) * this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
       } else {
-        this.eqParams.sig = Number(Math.pow(10, -1*(this.eqParams.mag + this.eqParams.airmass*this.eqParams.extinctCoeff)/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2)*this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+        this.eqParams.sig = Number(Math.pow(10, -1 * (this.eqParams.mag + this.eqParams.airmass * this.eqParams.extinctCoeff) / 2.5) * this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * Math.pow(this.eqParams.res, 2) * this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
       }
+
       // sky (========== MAGNITUDA NEBA SE NE KORIGUJE ZA EKSTINKCIJU =============)
-      this.eqParams.sky = Number(Math.pow(10, -1*this.eqParams.skyMag/2.5)*this.eqParams.fluxPh*this.eqParams.area*this.eqParams.totalTransparency*this.eqParams.qe*this.eqParams.bandwidth*Math.pow(this.eqParams.res,2));
+      this.eqParams.sky = Number(Math.pow(10, -1 * this.eqParams.skyMag / 2.5) * this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * Math.pow(this.eqParams.res, 2));
     },
 
     calculateExposure: function() {
       // signal
       var sig = this.eqParams.sig;
+
       // sky
       var sky = this.eqParams.sky;
+
       // dark current
       var dc = this.eqParams.dc;
+
       // read-out noise
       var ro = this.eqParams.ro;
+
       // number of pixels
       var n = this.eqParams.n;
+
       // signal-to-moise ratio
       var snr = this.eqParams.snr;
 
-      this.eqParams.exposure = Number(((Math.pow(snr,2)*(sig+(sky+dc)*n)+Math.sqrt(Math.pow(snr,4)*Math.pow((sig+(sky+dc)*n),2)+4*Math.pow(sig*snr*ro,2)*n))/(2*Math.pow(sig,2))).toFixed(2));
+      this.eqParams.exposure = Number(((Math.pow(snr, 2) * (sig + (sky + dc) * n) + Math.sqrt(Math.pow(snr, 4) * Math.pow((sig + (sky + dc) * n), 2) + 4 * Math.pow(sig * snr * ro, 2) * n)) / (2 * Math.pow(sig, 2))).toFixed(2));
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
       if (this.eqParams.exposure > 20) {
@@ -788,7 +826,6 @@ window.addEventListener('load', function() {
       } else {
         this.ekspozicija.innerHTML = this.eqParams.exposure;
       }
-
     },
 
 
@@ -797,7 +834,7 @@ window.addEventListener('load', function() {
       var txt = sn.toString();
       var txtWidth= ctx.measureText(txt).width;
 
-      this.graph.xOffset = txtWidth + 5 < 20? 25: txtWidth + 5;
+      this.graph.xOffset = txtWidth + 5 < 20 ? 25 : txtWidth + 5;
     },
 
     resetGraph: function() {
@@ -805,10 +842,10 @@ window.addEventListener('load', function() {
       var height = this.canvas.height;
       var width = this.canvas.width;
 
-      ctx.setTransform(1,0,0,1,0,0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.strokeStyle = "#000";
 
-      ctx.clearRect(0,0,width,height);
+      ctx.clearRect(0, 0, width, height);
     },
 
     drawGraphLines: function() {
@@ -816,9 +853,9 @@ window.addEventListener('load', function() {
       var width = this.canvas.width;
       var height = this.canvas.height;
 
-      this.setXOffset(Math.ceil(this.eqParams.snr*1.3));
+      this.setXOffset(Math.ceil(this.eqParams.snr * 1.3));
 
-      ctx.setTransform(1,0,0,-1,0,height);
+      ctx.setTransform(1, 0, 0, -1, 0, height);
 
       this.graph.broj_podeokaX = 0;
       this.graph.broj_podeokaY = 0;
@@ -828,23 +865,24 @@ window.addEventListener('load', function() {
 
       // koordinatne linije
       // x-osa
-      ctx.moveTo(this.graph.xOffset,this.graph.yOffset + 10);
-      ctx.lineTo(width - 30,this.graph.yOffset + 10);
+      ctx.moveTo(this.graph.xOffset, this.graph.yOffset + 10);
+      ctx.lineTo(width - 30, this.graph.yOffset + 10);
+
       // y-osa
-      ctx.moveTo(this.graph.xOffset + 10,this.graph.yOffset);
-      ctx.lineTo(this.graph.xOffset + 10,height - 20);
+      ctx.moveTo(this.graph.xOffset + 10, this.graph.yOffset);
+      ctx.lineTo(this.graph.xOffset + 10, height - 20);
 
       // podeoci na x osi
       for (var i = this.graph.xOffset + 10 + this.graph.podeokX; i <= width - 30; i += this.graph.podeokX) {
-        ctx.moveTo(i,this.graph.yOffset+10);
-        ctx.lineTo(i,this.graph.yOffset);
+        ctx.moveTo(i, this.graph.yOffset + 10);
+        ctx.lineTo(i, this.graph.yOffset);
         this.graph.broj_podeokaX++;
       }
 
       // podeoci na y osi
       for (var j = this.graph.yOffset + 10 + this.graph.podeokY; j <= height - 20; j += this.graph.podeokY) {
-        ctx.moveTo(this.graph.xOffset+10,j);
-        ctx.lineTo(this.graph.xOffset,j);
+        ctx.moveTo(this.graph.xOffset + 10, j);
+        ctx.lineTo(this.graph.xOffset, j);
         this.graph.broj_podeokaY++;
       }
 
@@ -863,53 +901,53 @@ window.addEventListener('load', function() {
       var t = this.eqParams.exposure;
       var snr = this.eqParams.snr;
 
-      this.graph.upLimitX = Math.ceil(t*1.3);
-      this.graph.upLimitY = Math.ceil(snr*1.3);
+      this.graph.upLimitX = Math.ceil(t * 1.3);
+      this.graph.upLimitY = Math.ceil(snr * 1.3);
 
-      ctx.setTransform(1,0,0,1,0,0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
 
       // oznake koordinatnih osa
       ctx.font = "16px sans-serif";
-      ctx.fillText("S/N",this.graph.xOffset,15);
-      ctx.fillText("t(s)",width-25,height-this.graph.yOffset-5);
+      ctx.fillText("S/N", this.graph.xOffset, 15);
+      ctx.fillText("t(s)", width - 25, height - this.graph.yOffset - 5);
 
       // koordinatni početak
       ctx.font = "10px sans-serif";
-      ctx.fillText("0",3,height-this.graph.yOffset-5); // y-osa
-      ctx.fillText("0",this.graph.xOffset+7,height-this.graph.yOffset+15); // x-osa
+      ctx.fillText("0", 3, height - this.graph.yOffset - 5); // y-osa
+      ctx.fillText("0", this.graph.xOffset + 7, height - this.graph.yOffset + 15); // x-osa
 
       // vrednosti na x osi
       if (this.graph.upLimitX > this.graph.broj_podeokaX) {
-        while (this.graph.upLimitX%this.graph.broj_podeokaX !== 0) {
+        while (this.graph.upLimitX % this.graph.broj_podeokaX !== 0) {
           this.graph.upLimitX++;
         }
         for (var j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 30; j += this.graph.podeokX) {
-          ctx.moveTo(j,height-3);
-          ctx.fillText(n*this.graph.upLimitX/this.graph.broj_podeokaX,j-5,height-this.graph.yOffset+15);
+          ctx.moveTo(j, height - 3);
+          ctx.fillText(n * this.graph.upLimitX / this.graph.broj_podeokaX, j - 5, height - this.graph.yOffset + 15);
           n++;
         }
       } else {
         for (var j = this.graph.xOffset + 10 + this.graph.podeokX; j < width - 20; j += this.graph.podeokX) {
-          ctx.moveTo(j,height-3);
-          ctx.fillText((n*this.graph.upLimitX/this.graph.broj_podeokaX).toFixed(2),j-5,height-this.graph.yOffset+15);
+          ctx.moveTo(j, height - 3);
+          ctx.fillText((n * this.graph.upLimitX / this.graph.broj_podeokaX).toFixed(2), j - 5, height - this.graph.yOffset + 15);
           n++;
         }
       }
 
       // vrednosti na y osi
       if (this.graph.upLimitY > this.graph.broj_podeokaY) {
-        while (this.graph.upLimitY%this.graph.broj_podeokaY !== 0) {
+        while (this.graph.upLimitY % this.graph.broj_podeokaY !== 0) {
           this.graph.upLimitY++;
         }
         for (var j = height - 15 - this.graph.yOffset - this.graph.podeokY; j > 20; j -= this.graph.podeokY) {
-          ctx.moveTo(0,j);
-          ctx.fillText(m*this.graph.upLimitY/this.graph.broj_podeokaY,3,j+10);
+          ctx.moveTo(0, j);
+          ctx.fillText(m * this.graph.upLimitY / this.graph.broj_podeokaY, 3, j + 10);
           m++;
         }
       } else {
         for (var j = height - 15 - this.graph.yOffset - this.graph.podeokY; j > 20; j -= this.graph.podeokY) {
-          ctx.moveTo(0,j);
-          ctx.fillText((m*this.graph.upLimitY/this.graph.broj_podeokaY).toFixed(2),3,j+10);
+          ctx.moveTo(0, j);
+          ctx.fillText((m * this.graph.upLimitY / this.graph.broj_podeokaY).toFixed(2), 3, j + 10);
           m++;
         }
       }
@@ -920,8 +958,8 @@ window.addEventListener('load', function() {
       var height = this.canvas.height;
       var width = this.canvas.width;
 
-      var scaleX = this.graph.podeokX*this.graph.broj_podeokaX/this.graph.upLimitX;
-      var scaleY = this.graph.podeokY*this.graph.broj_podeokaY/this.graph.upLimitY;
+      var scaleX = this.graph.podeokX * this.graph.broj_podeokaX / this.graph.upLimitX;
+      var scaleY = this.graph.podeokY * this.graph.broj_podeokaY / this.graph.upLimitY;
 
       var sig = this.eqParams.sig;
       var sky = this.eqParams.sky;
@@ -931,15 +969,15 @@ window.addEventListener('load', function() {
 
       var snr = 0;
 
-      ctx.setTransform(1,0,0,-1,this.graph.xOffset+11,height-this.graph.yOffset-11);
+      ctx.setTransform(1, 0, 0, -1, this.graph.xOffset + 11, height - this.graph.yOffset - 11);
       ctx.beginPath();
 
-      ctx.moveTo(0,0);
+      ctx.moveTo(0, 0);
 
       if (this.graph.upLimitX !== 0) {
-        for (var t = 0; t <= this.graph.upLimitX; t+= this.graph.upLimitX/this.graph.dataPointsNo) {
-          snr = sig*t/Math.sqrt(sig*t+sky*n*t+dc*t*n+ro*ro*n);
-          ctx.lineTo(t*scaleX,snr*scaleY);
+        for (var t = 0; t <= this.graph.upLimitX; t += this.graph.upLimitX / this.graph.dataPointsNo) {
+          snr = sig * t / Math.sqrt(sig * t + sky * n * t + dc * t * n + ro * ro * n);
+          ctx.lineTo(t * scaleX, snr * scaleY);
         }
       }
 
@@ -947,7 +985,6 @@ window.addEventListener('load', function() {
       ctx.closePath();
 
       this.graph.drawn = true;
-
     },
 
     drawHelpLines: function() {
@@ -955,25 +992,24 @@ window.addEventListener('load', function() {
       var height = this.canvas.height;
       var width = this.canvas.width;
 
-      var scaleX = this.graph.podeokX*this.graph.broj_podeokaX/this.graph.upLimitX;
-      var scaleY = this.graph.podeokY*this.graph.broj_podeokaY/this.graph.upLimitY;
+      var scaleX = this.graph.podeokX * this.graph.broj_podeokaX / this.graph.upLimitX;
+      var scaleY = this.graph.podeokY * this.graph.broj_podeokaY / this.graph.upLimitY;
 
       var t = this.eqParams.exposure;
       var snr = this.eqParams.snr;
 
-      ctx.setTransform(1,0,0,-1,this.graph.xOffset+11,height-this.graph.yOffset-11);
+      ctx.setTransform(1, 0, 0, -1, this.graph.xOffset + 11, height - this.graph.yOffset - 11);
       ctx.beginPath();
 
       ctx.strokeStyle = "#bbb";
 
-      ctx.moveTo(0,snr*scaleY-1);
-      ctx.lineTo(this.canvas.width,snr*scaleY-1);
-      ctx.moveTo(t*scaleX-1,0);
-      ctx.lineTo(t*scaleX-1,this.canvas.width);
+      ctx.moveTo(0, snr * scaleY - 1);
+      ctx.lineTo(this.canvas.width, snr * scaleY - 1);
+      ctx.moveTo(t * scaleX - 1, 0);
+      ctx.lineTo(t * scaleX - 1, this.canvas.width);
 
       ctx.stroke();
       ctx.closePath();
-
     },
 
 
@@ -991,7 +1027,6 @@ window.addEventListener('load', function() {
       console.log("S/N: " + this.eqParams.snr);
       console.log("eqParams: " + JSON.stringify(this.eqParams, null, '\t'));
     },
-
 
 
   }

@@ -59,13 +59,19 @@
       this.filterParams.classList.remove("on");
       this.telescope.custom.diameter = this.telescopeDiameter.value;
       this.telescope.custom.focalLength = this.telescopeFocalLength.value;
-      this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ? this.telescopeEffectiveAreaCoef.value/100 : 1;
-      this.eqParams.reducer = this.reducerValue.value ? Number(this.reducerValue.value) : 1;
+      this.telescope.custom.effectiveAreaCoef = this.telescopeEffectiveAreaCoef.value ?
+                                                this.telescopeEffectiveAreaCoef.value / 100 :
+                                                1;
+      this.eqParams.reducer = this.reducerValue.value ?
+                              Number(this.reducerValue.value) :
+                              1;
       this.camera.custom.ro = this.ccdRO.value;
       this.camera.custom.dc = this.ccdDC.value;
-      this.camera.custom.pxSize = this.ccdPixelSize.value/1000000;
-      this.camera.custom.qe[0] = this.ccdQE.value/100;
-      this.eqParams.binning = this.binningValue.value ? Number(this.binningValue.value) : 1;
+      this.camera.custom.pxSize = this.ccdPixelSize.value / 1000000;
+      this.camera.custom.qe[0] = this.ccdQE.value / 100;
+      this.eqParams.binning = this.binningValue.value ?
+                              Number(this.binningValue.value) :
+                              1;
       this.band.custom.wavelength = this.bandWavelength.value;
       this.band.custom.bandwidth = this.bandBandwidth.value;
       this.band.custom.fluxPh = this.bandFlux.value;
@@ -73,7 +79,9 @@
     },
 
     showGraph: function() {
-      this.showGraphCB.checked && this.graph.drawn ? this.canvas.classList.remove("collapsed"): this.canvas.classList.add("collapsed");
+      this.showGraphCB.checked && this.graph.drawn ?
+      this.canvas.classList.remove("collapsed") :
+      this.canvas.classList.add("collapsed");
     },
 
     showHelp: function() {
@@ -83,9 +91,10 @@
     getQE: function(lambda, cameraQE) {
       var diff = 999999999999;
       var pos = 0;
+
       Object.keys(cameraQE).map(function(key, index) {
-        if (Math.abs(lambda/10 - key) < diff) {
-          diff = Math.abs(lambda/10 - key);
+        if (Math.abs(lambda / 10 - key) < diff) {
+          diff = Math.abs(lambda / 10 - key);
           pos = key;
         }
       });
@@ -98,7 +107,7 @@
       // erf(x) = 2/sqrt(pi) * integrate(from=0, to=x, e^-(t^2) ) dt
       // with using Taylor expansion,
       //        = 2/sqrt(pi) * sigma(n=0 to +inf, ((-1)^n * x^(2n+1))/(n! * (2n+1)))
-      // calculationg n=0 to 50
+      // calculating n=0 to 50
       var m = 1.00;
       var s = 1.00;
       var sum = x * 1.0;
@@ -111,9 +120,12 @@
       return 2 * sum / Math.sqrt(Math.PI);
     },
 
-    // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). We calculate the fraction of that light which falls within an aperture of radius given by second argument (with units of arcsec).
+    // Figure out what fraction of a star's light falls within the aperture.
+    // We assume that the starlight has a circular gaussian distribution with
+    // FWHM given by the first argument (with units of arcsec). We calculate
+    // the fraction of that light which falls within an aperture of radius
+    // given by second argument (with units of arcsec).
     fraction_inside: function(fwhm, radius) {
-
       var sigma;
       var z;
       var x1, x2;
@@ -123,12 +135,12 @@
       large = 1000.0;
 
       // calculate how far out the "radius" is in units of "sigmas"
-      sigma = fwhm/2.35;
-      z = radius/(sigma*1.414);
+      sigma = fwhm / 2.35;
+      z = radius / (sigma * 1.414);
 
       // now, we assume that a radius of "large" is effectively infinite
       x1 = this.erf(z);
-      ratio = (x1*x1);
+      ratio = (x1 * x1);
 
       return(ratio);
     },
@@ -136,7 +148,6 @@
     // Figure out what fraction of a star's light falls within the aperture.  We assume that the starlight has a circular gaussian distribution with FWHM given by the first argument (with units of arcsec). This function goes to the trouble of calculating how much of the light falls within fractional pixels defined by the given radius of a synthetic aperture.  It is slow but more accurate than the "fraction_inside" function.
 
     fraction_inside_slow: function(fwhm, radius, pixsize) {
-
       var i, j, k, l;
       var max_pix_rad;
       var sigma2;
@@ -174,9 +185,9 @@
       psf_center_y = 0.5;
 
       sigma2 = fwhm / 2.35;
-      sigma2 = sigma2*sigma2;
-      radius2 = radius*radius;
-      bit = 1.0/piece;
+      sigma2 = sigma2 * sigma2;
+      radius2 = radius * radius;
+      bit = 1.0 / piece;
 
       rad_sum = 0;
       all_sum = 0;
@@ -188,19 +199,19 @@
           pix_sum = 0;
           for (k = 0; k < piece; k++) {
 
-            x = (i - psf_center_x) + (k + 0.5)*bit;
-            fx = Math.exp(-(x*x)/(2.0*sigma2));
+            x = (i - psf_center_x) + (k + 0.5) * bit;
+            fx = Math.exp(-(x * x) / (2.0 * sigma2));
 
             for (l = 0; l < piece; l++) {
 
-              y = (j - psf_center_y) + (l + 0.5)*bit;
-              fy = Math.exp(-(y*y)/(2.0*sigma2));
+              y = (j - psf_center_y) + (l + 0.5) * bit;
+              fy = Math.exp(-(y * y) / (2.0 * sigma2));
 
-              inten = fx*fy;
-              this_bit = inten*bit*bit;
+              inten = fx * fy;
+              this_bit = inten * bit * bit;
               pix_sum += this_bit;
 
-              rad2 = x*x + y*y;
+              rad2 = x * x + y * y;
               if (rad2 <= radius2) {
                 rad_sum += this_bit;
               }

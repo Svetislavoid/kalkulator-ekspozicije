@@ -4,7 +4,8 @@
   "description": "Live preview: https://svetislavoid.github.io/kalkulator-ekspozicije/",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "grunt:build": "grunt build"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
   },
   "homepage": "https://github.com/Svetislavoid/kalkulator-ekspozicije#readme",
   "devDependencies": {
-    "grunt": "^1.0.4",
+    "grunt": "^1.4.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^3.2.1",
     "grunt-contrib-watch": "^1.1.0",
