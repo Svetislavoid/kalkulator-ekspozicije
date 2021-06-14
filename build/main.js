@@ -507,7 +507,7 @@ window.addEventListener('load', function() {
       x1 = this.erf(z);
       ratio = (x1 * x1);
 
-      return(ratio);
+      return ratio;
     },
 
     // Figure out what fraction of a star's light falls within the aperture.
@@ -592,7 +592,7 @@ window.addEventListener('load', function() {
 
       ratio = rad_sum / all_sum;
 
-      return(ratio);
+      return ratio;
     },
 
 
@@ -672,27 +672,37 @@ window.addEventListener('load', function() {
 
     fillData: function() {
       if (this.teleskop.options[this.teleskop.selectedIndex].text === 'Custom telescope') {
-        this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text + ' (D = ' + this.telescope.custom.diameter + 'm, f = ' + this.telescope.custom.focalLength + 'm)';
+        this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text + ' (D = ' +
+                                    this.telescope.custom.diameter + 'm, f = ' + this.telescope.custom.focalLength + 'm)';
       } else {
         this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
       }
+
       if (this.reducer.options[this.reducer.selectedIndex].text === 'Custom reducer') {
         this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text + ' (' + this.eqParams.reducer + 'x)';
       } else {
         this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
       }
+
       if (this.ccd.options[this.ccd.selectedIndex].text === 'Custom CCD') {
-        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc + 'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' + this.camera.custom.qe[0] + ', pixel size = ' + this.camera.custom.pxSize*1000000 + '&#181;m)';
+        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc +
+                                'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' +
+                                this.camera.custom.qe[0] + ', pixel size = ' + this.camera.custom.pxSize * 1000000 + '&#181;m)';
       } else {
         this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
       }
+
       if (this.binning.options[this.binning.selectedIndex].text === 'Custom binning') {
-        this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text + ' (' + this.eqParams.binning + 'x' + this.eqParams.binning + ')';
+        this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text + ' (' + this.eqParams.binning + 'x' +
+                                    this.eqParams.binning + ')';
       } else {
         this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
       }
+
       if (this.filter.options[this.filter.selectedIndex].text === 'Custom band') {
-        this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text + ' (&#955; = ' + this.band.custom.wavelength + '&#8491;, &#916;&#955; = ' + this.band.custom.bandwidth + '&#8491;, F = ' + this.band.custom.fluxPh + 'photon/s/cm<sup>2</sup>/&#8491;)';
+        this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text + ' (&#955; = ' + this.band.custom.wavelength +
+                                  '&#8491;, &#916;&#955; = ' + this.band.custom.bandwidth + '&#8491;, F = ' + this.band.custom.fluxPh +
+                                  'photon/s/cm<sup>2</sup>/&#8491;)';
       } else {
         this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
       }
@@ -716,6 +726,7 @@ window.addEventListener('load', function() {
 
     execute: function() {
       this.getFnValues();
+      
       if (this.eqParams.sig > 0.01) { // da bi sprečili kočenje skripte za premale vrednosti Ssig 
         this.calculateExposure();
         this.resetGraph();
@@ -765,7 +776,7 @@ window.addEventListener('load', function() {
                                   (this.reducer.value === 'custom' ? this.eqParams.reducer : this.reducer.value));
 
       // unobstructed area of main mirror in m^2
-      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter, 2) * Math.PI/4) *
+      this.eqParams.area = Number(Math.pow(this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].diameter, 2) * Math.PI / 4) *
                             this.telescope[this.teleskop.options[this.teleskop.selectedIndex].value].effectiveAreaCoef;
 
       // camera resolution
@@ -775,7 +786,7 @@ window.addEventListener('load', function() {
       // number of pixels
       if (this.object.value == 'point') {
         // this.eqParams.n = Number((Math.pow(0.67 * this.aperture.value / this.eqParams.res, 2) * Math.PI).toFixed(2)); // ova formula bi trebalo da daje tačniju vrednost ali svi drugi kalkulatori koriste donju formulu pa ćemo i mi
-        this.eqParams.n = Number((Math.pow(this.aperture.value/this.eqParams.res, 2) * Math.PI).toFixed(2));
+        this.eqParams.n = Number((Math.pow(this.aperture.value / this.eqParams.res, 2) * Math.PI).toFixed(2));
       } else {
         this.eqParams.n = 1;
       }
@@ -794,13 +805,18 @@ window.addEventListener('load', function() {
 
       // signal
       if (this.object.value == 'point') {
-        this.eqParams.sig = Number(Math.pow(10, -1 * (this.eqParams.mag + this.eqParams.airmass * this.eqParams.extinctCoeff) / 2.5) * this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+        this.eqParams.sig = Number(Math.pow(10, -1 * (this.eqParams.mag + this.eqParams.airmass * this.eqParams.extinctCoeff) / 2.5) *
+                            this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe *
+                            this.eqParams.bandwidth * this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
       } else {
-        this.eqParams.sig = Number(Math.pow(10, -1 * (this.eqParams.mag + this.eqParams.airmass * this.eqParams.extinctCoeff) / 2.5) * this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * Math.pow(this.eqParams.res, 2) * this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
+        this.eqParams.sig = Number(Math.pow(10, -1 * (this.eqParams.mag + this.eqParams.airmass * this.eqParams.extinctCoeff) / 2.5) *
+                            this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe *
+                            this.eqParams.bandwidth * Math.pow(this.eqParams.res, 2) * this.fraction_inside_slow(this.seeing.value, this.aperture.value, this.eqParams.res));
       }
 
       // sky (========== MAGNITUDA NEBA SE NE KORIGUJE ZA EKSTINKCIJU =============)
-      this.eqParams.sky = Number(Math.pow(10, -1 * this.eqParams.skyMag / 2.5) * this.eqParams.fluxPh * this.eqParams.area * this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * Math.pow(this.eqParams.res, 2));
+      this.eqParams.sky = Number(Math.pow(10, -1 * this.eqParams.skyMag / 2.5) * this.eqParams.fluxPh * this.eqParams.area *
+                          this.eqParams.totalTransparency * this.eqParams.qe * this.eqParams.bandwidth * Math.pow(this.eqParams.res, 2));
     },
 
     calculateExposure: function() {
@@ -819,10 +835,12 @@ window.addEventListener('load', function() {
       // number of pixels
       var n = this.eqParams.n;
 
-      // signal-to-moise ratio
+      // signal-to-noise ratio
       var snr = this.eqParams.snr;
 
-      this.eqParams.exposure = Number(((Math.pow(snr, 2) * (sig + (sky + dc) * n) + Math.sqrt(Math.pow(snr, 4) * Math.pow((sig + (sky + dc) * n), 2) + 4 * Math.pow(sig * snr * ro, 2) * n)) / (2 * Math.pow(sig, 2))).toFixed(2));
+      this.eqParams.exposure = Number(((Math.pow(snr, 2) * (sig + (sky + dc) * n) + Math.sqrt(Math.pow(snr, 4) *
+                                Math.pow((sig + (sky + dc) * n), 2) + 4 * Math.pow(sig * snr * ro, 2) * n)) /
+                                (2 * Math.pow(sig, 2))).toFixed(2));
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
       if (this.eqParams.exposure > 20) {

@@ -142,7 +142,7 @@
       x1 = this.erf(z);
       ratio = (x1 * x1);
 
-      return(ratio);
+      return ratio;
     },
 
     // Figure out what fraction of a star's light falls within the aperture.
@@ -227,5 +227,5 @@
 
       ratio = rad_sum / all_sum;
 
-      return(ratio);
+      return ratio;
     },

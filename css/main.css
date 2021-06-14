@@ -45,6 +45,16 @@ h6 {
   margin: 30px auto;
 }
 
+.logos {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.logo {
+  height: 80px;
+  margin: 0 20px;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -164,6 +174,7 @@ label + * {
   height: 40px;
   width: 140px;
   background-color: #bbb;
+  cursor: pointer;
 }
 
 .submit {

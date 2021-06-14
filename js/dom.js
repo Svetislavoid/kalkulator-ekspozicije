@@ -74,27 +74,37 @@
 
     fillData: function() {
       if (this.teleskop.options[this.teleskop.selectedIndex].text === 'Custom telescope') {
-        this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text + ' (D = ' + this.telescope.custom.diameter + 'm, f = ' + this.telescope.custom.focalLength + 'm)';
+        this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text + ' (D = ' +
+                                    this.telescope.custom.diameter + 'm, f = ' + this.telescope.custom.focalLength + 'm)';
       } else {
         this.r_teleskop.innerHTML = this.teleskop.options[this.teleskop.selectedIndex].text;
       }
+
       if (this.reducer.options[this.reducer.selectedIndex].text === 'Custom reducer') {
         this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text + ' (' + this.eqParams.reducer + 'x)';
       } else {
         this.r_reducer.innerHTML = this.reducer.options[this.reducer.selectedIndex].text;
       }
+
       if (this.ccd.options[this.ccd.selectedIndex].text === 'Custom CCD') {
-        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc + 'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' + this.camera.custom.qe[0] + ', pixel size = ' + this.camera.custom.pxSize*1000000 + '&#181;m)';
+        this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text + ' (dark current = ' + this.camera.custom.dc +
+                                'e<sup>-</sup>/s/pix, read-out = ' + this.camera.custom.ro + 'e<sup>-</sup>/pix, QE = ' +
+                                this.camera.custom.qe[0] + ', pixel size = ' + this.camera.custom.pxSize * 1000000 + '&#181;m)';
       } else {
         this.r_ccd.innerHTML = this.ccd.options[this.ccd.selectedIndex].text;
       }
+
       if (this.binning.options[this.binning.selectedIndex].text === 'Custom binning') {
-        this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text + ' (' + this.eqParams.binning + 'x' + this.eqParams.binning + ')';
+        this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text + ' (' + this.eqParams.binning + 'x' +
+                                    this.eqParams.binning + ')';
       } else {
         this.r_binning.innerHTML = this.binning.options[this.binning.selectedIndex].text;
       }
+
       if (this.filter.options[this.filter.selectedIndex].text === 'Custom band') {
-        this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text + ' (&#955; = ' + this.band.custom.wavelength + '&#8491;, &#916;&#955; = ' + this.band.custom.bandwidth + '&#8491;, F = ' + this.band.custom.fluxPh + 'photon/s/cm<sup>2</sup>/&#8491;)';
+        this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text + ' (&#955; = ' + this.band.custom.wavelength +
+                                  '&#8491;, &#916;&#955; = ' + this.band.custom.bandwidth + '&#8491;, F = ' + this.band.custom.fluxPh +
+                                  'photon/s/cm<sup>2</sup>/&#8491;)';
       } else {
         this.r_filter.innerHTML = this.filter.options[this.filter.selectedIndex].text;
       }
