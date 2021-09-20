@@ -11,13 +11,13 @@ This calculator is made primarily for planning observations at the [Astronomical
 
 ## How to use
 
-In the form, instruments currently available at the AS Vidojevica can be choosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the choosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.
+In the form, instruments currently available at the AS Vidojevica can be chosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the chosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.
 
 Calculator can also be used with some custom instruments and options, and not only those listed in the dropdown menus. In order to do that, choose 'Custom' option from the dropdown menu. Pop-up window will appear asking for custom instrument parameters.
 
 When using custom telescope, telescope effective area can be omitted, in which case a default value of 100% will be used.
 
-When using custom CCD, to get the best results enter quantum efficiency of the CCD at wavelength that corresponds to the mean wavelength of a filter that is going to be used.
+When using custom CCD, to get the best results enter quantum efficiency of the CCD at the wavelength that corresponds to the mean wavelength of a filter that is going to be used.
 
 ## Calculations
 
