@@ -81,6 +81,11 @@ h6 {
   width: 26%;
 }
 
+.form.hidden,
+.result.hidden {
+  display: none;
+}
+
 .telescopeParams,
 .reducerParams,
 .ccdParams,
@@ -101,29 +106,32 @@ h6 {
   margin: 10px auto 0;
 }
 
+form {
+  width: max-content;
+  margin: auto;
+}
+
 .form {
-  width: 43%;
-  display: inline-block;
+  max-width: 600px;
 }
 
 .result {
-  width: 55%;
-  display: inline-block;
-  vertical-align: top;
-  float: right;
-}
-
-.result section {
-  padding-left: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
 }
 
 .result p {
-  margin: 6px 0 6px 20px;
+  margin: 6px 0;
+}
+
+.result section {
+  max-width: 100%;
 }
 
 #canvas {
-  display: block;
-  margin: 40px auto 0;
+  max-width: 50%;
+  margin: auto;
 }
 
 fieldset {
@@ -136,6 +144,7 @@ legend {
 
 .collapsed {
   height: 0;
+  margin: 0;
   overflow: hidden;
 }
 
@@ -148,13 +157,8 @@ legend {
   background-color: #cde; 
 }
 
-.showGraph {
-  text-align: center;
-}
-
-.showGraph input {
-  margin: 0;
-  vertical-align: bottom;
+.result p.showGraph {
+  margin: 20px 0 0 0;
 }
 
 label {
@@ -177,8 +181,14 @@ label + * {
   cursor: pointer;
 }
 
-.submit {
+.btn.submit,
+.btn.back {
   margin: 30px auto 0;
+  width: 100%;
+}
+
+.btn.back {
+  flex: 100%;
 }
 
 .btn:hover {
@@ -193,7 +203,6 @@ label + * {
 .result .ekspozicija span {
   margin-top: 15px;
   font-size: 18px;
-  text-align: center;
 }
 
 .helpButton {

@@ -2,15 +2,16 @@
 
 Live preview: https://svetislavoid.github.io/kalkulator-ekspozicije/
 
-![Exposure time calculator](/img/exposureTimeCalculator.png)
+![Exposure time calculator form](/img/exposureTimeCalculator1.png)
+![Exposure time calculator results](/img/exposureTimeCalculator2.png)
 
 ## About the calculator
 
-This calculator is made primarily for planning observations at the [Astronomical Station Vidojevica](http://vidojevica.aob.rs/) [(Astronomical Observatory of Belgrade)](http://aob.rs/). By filling up the form on the left and clicking on the 'Calculate' button, exposure time needed in order to achive wanted signal-to-noise ratio (S/N) is calculated. If, for the given parameters, exposure time is calculated to be less than 0.01s, calculator will not show any result and the graph will not be drawn.
+This calculator is made primarily for planning observations at the [Astronomical Station Vidojevica](http://vidojevica.aob.rs/) [(Astronomical Observatory of Belgrade)](http://aob.rs/). By filling up the form and clicking on the 'Calculate' button, exposure time needed in order to achive wanted signal-to-noise ratio (S/N) is calculated. If, for the given parameters, exposure time is calculated to be less than 0.01s, calculator will not show any result and the graph will not be drawn.
 
 ## How to use
 
-In the form on the left, instruments currently available at the AS Vidojevica can be choosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the choosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.
+In the form, instruments currently available at the AS Vidojevica can be choosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the choosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.
 
 Calculator can also be used with some custom instruments and options, and not only those listed in the dropdown menus. In order to do that, choose 'Custom' option from the dropdown menu. Pop-up window will appear asking for custom instrument parameters.
 
@@ -102,13 +103,13 @@ is camera resolution.
 
 ## Bands
 
-| Band                | Wavelength (&#8491;) | Bandwidth (&#8491;) | Flux (J) | Flux (photons) | Extinction coefficient (mag/airmass) |
-| :---                | :----:               | :----:              | :----:   | :----:         | :----:                               |
-| B                   | 4450                 | 940                 | 4260     | 1445           | 0.4                                  |
-| V                   | 5510                 | 880                 | 3640     | 997            | 0.2                                  |
-| R                   | 6580                 | 1380                | 3080     | 706            | 0.1                                  |
-| I                   | 8060                 | 1490                | 2550     | 477            | 0.08                                 |
-| L                   | 35000                | 4720                | 280      | 12             | 0                                    |
-| H<sub>&alpha;</sub> | 6563                 | 50                  | 3631     | 835            | 0                                    |
-| Red-continuum       | 6452                 | 50                  | 3631     | 849            | 0                                    |
-| [SII]               | 6718                 | 35                  | 3631     | 816            | 0                                    |
+| Band                | Wavelength (&#8491;) | Bandwidth (&#8491;) | Flux (Jy) | Flux (photons) | Extinction coefficient (mag/airmass) |
+| :---                | :----:               | :----:              | :----:    | :----:         | :----:                               |
+| B                   | 4450                 | 940                 | 4260      | 1445           | 0.4                                  |
+| V                   | 5510                 | 880                 | 3640      | 997            | 0.2                                  |
+| R                   | 6580                 | 1380                | 3080      | 706            | 0.1                                  |
+| I                   | 8060                 | 1490                | 2550      | 477            | 0.08                                 |
+| L                   | 35000                | 4720                | 280       | 12             | 0                                    |
+| H<sub>&alpha;</sub> | 6563                 | 50                  | 3631      | 835            | 0                                    |
+| Red-continuum       | 6452                 | 50                  | 3631      | 849            | 0                                    |
+| [SII]               | 6718                 | 35                  | 3631      | 816            | 0                                    |

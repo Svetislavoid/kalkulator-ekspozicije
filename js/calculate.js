@@ -100,9 +100,9 @@
                                 (2 * Math.pow(sig, 2))).toFixed(2));
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
-      if (this.eqParams.exposure > 20) {
-        this.ekspozicija.innerHTML = Math.round(this.eqParams.exposure);
+      if (this.eqParams.exposure <= 20) {
+        this.ekspozicija.innerHTML = this.eqParams.exposure + "s";
       } else {
-        this.ekspozicija.innerHTML = this.eqParams.exposure;
+        this.ekspozicija.innerHTML = this.secondsToTime(Math.round(this.eqParams.exposure));
       }
     },

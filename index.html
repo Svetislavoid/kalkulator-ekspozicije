@@ -176,12 +176,10 @@
               <input class="signal-to-noise" type="text">
             </div>
 
-            <p class="showGraph">Show graph <input type="checkbox" checked="checked" name="showGraph"></p>
-
             <input type="button" class="btn submit" value="Calculate">
           </div>
 
-          <div class="result">
+          <div class="result hidden">
 
             <section>
               <p>Object: <span class="r-object bold"></span></p>
@@ -202,13 +200,15 @@
               <p>Dark current: <span class="s_dc bold">0</span> e<sup>-</sup>/s/pix</p>
               <p>Read out noise: <span class="s_ro bold">0</span> e<sup>-</sup>/pix</p>
               <p>Number of pixels: <span class="n_pix bold">0</span> pix</p>
+              <p class="ekspozicija bold">Exposure time: t = <span>0</span></p>
+              <p class="showGraph"><input type="checkbox" name="showGraph"> Show graph</p>
             </section>
 
-            <p class="ekspozicija bold">Exposure time: t = <span>0</span>s</p>
+            <canvas id="canvas" class="collapsed" width="550" height="400"></canvas>
+
+            <input type="button" class="btn back" value="Back">
 
           </div>
-
-          <canvas id="canvas" class="collapsed" width="550" height="400"></canvas>
 
         </fieldset>
 
@@ -220,11 +220,11 @@
 
         <h4>About the calculator</h4>
 
-        <p>This calculator is made primarily for planning observations at the <a href="http://vidojevica.aob.rs/" target="_blank"> Astronomical Station Vidojevica</a> <a href="http://aob.rs/" target="_blank">(Astronomical Observatory of Belgrade)</a>. By filling up the form on the left and clicking on the 'Calculate' button, exposure time needed in order to achive wanted signal-to-noise ratio (S/N) is calculated. If, for the given parameters, exposure time is calculated to be less than 0.01s, calculator will not show any result and the graph will not be drawn.</p>
+        <p>This calculator is made primarily for planning observations at the <a href="http://vidojevica.aob.rs/" target="_blank"> Astronomical Station Vidojevica</a> <a href="http://aob.rs/" target="_blank">(Astronomical Observatory of Belgrade)</a>. By filling up the form and clicking on the 'Calculate' button, exposure time needed in order to achive wanted signal-to-noise ratio (S/N) is calculated. If, for the given parameters, exposure time is calculated to be less than 0.01s, calculator will not show any result and the graph will not be drawn.</p>
 
         <h4>How to use</h4>
 
-        <p>In the form on the left, instruments currently available at the AS Vidojevica can be choosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the choosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.</p>
+        <p>In the form, instruments currently available at the AS Vidojevica can be choosen. Total throughput over all reflective and refractive optical surfaces in the telescope along with the transmission of the choosen filter should be calculated separately and entered in the 'Total transparency' field. The atmosphere transmission coefficient should also be calculated independently of the calculator and entered in the 'Sky transparency' field.</p>
         <p>Calculator can also be used with some custom instruments and options, and not only those listed in the dropdown menus. In order to do that, choose 'Custom' option from the dropdown menu. Pop-up window will appear asking for custom instrument parameters.</p>
         <p>When using custom telescope, telescope effective area can be omitted, in which case a default value of 100% will be used.</p>
         <p>When using custom CCD, to get the best results enter quantum efficiency of the CCD at wavelength that corresponds to the mean wavelength of a filter that is going to be used.</p>

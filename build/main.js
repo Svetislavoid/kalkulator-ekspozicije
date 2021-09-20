@@ -151,11 +151,6 @@ window.addEventListener('load', function() {
         pxSize: 13.5e-6,
         qe: {
           '0': 0.98, // peak QE
-          '200': 0.07,
-          '220': 0.1,
-          '240': 0.22,
-          '260': 0.1,
-          '280': 0.08,
           '300': 0.09,
           '320': 0.12,
           '340': 0.18,
@@ -361,6 +356,7 @@ window.addEventListener('load', function() {
     init: function() {
       this.cacheDom();
       this.bindEvent('click', this.submit, this.execute.bind(this));
+      this.bindEvent('click', this.back, this.goBack.bind(this));
       this.bindEvent('click', this.customTelescope, this.addCustomTelescope.bind(this));
       this.bindEvent('click', this.customReducer, this.addCustomReducer.bind(this));
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
@@ -446,6 +442,11 @@ window.addEventListener('load', function() {
 
     showHelp: function() {
       this.help.classList.toggle("collapsed");
+    },
+
+    goBack: function() {
+      this.form.classList.remove("hidden");
+      this.result.classList.add("hidden");
     },
 
     getQE: function(lambda, cameraQE) {
@@ -590,6 +591,24 @@ window.addEventListener('load', function() {
       return ratio;
     },
 
+    secondsToTime: function(secs) {
+      var hours = Math.floor(secs / 3600);
+      var minutes = Math.floor(secs % 3600 / 60);
+      var seconds = Math.floor(secs % 60);
+
+      var exposureTime;
+
+      if (hours) {
+        exposureTime = hours + "h " + minutes + "m " + seconds + "s" + " (" + secs + "s)";
+      } else if (minutes) {
+        exposureTime = minutes + "m " + seconds + "s" + " (" + secs + "s)";
+      } else {
+        exposureTime = seconds + "s";
+      }
+
+      return exposureTime;
+    },
+
 
     cacheDom: function() {
       this.object = document.querySelector('.object');
@@ -655,6 +674,7 @@ window.addEventListener('load', function() {
       this.customBand = document.querySelector('.customBand');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
+      this.back = document.querySelector('.back');
       this.helpButton = document.querySelector('.helpButton');
       this.help = document.querySelector('.help');
 
@@ -721,6 +741,8 @@ window.addEventListener('load', function() {
 
     execute: function() {
       this.getFnValues();
+      this.form.classList.add("hidden");
+      this.result.classList.remove("hidden");
       
       if (this.eqParams.sig > 0.01) { // da bi sprečili kočenje skripte za premale vrednosti Ssig 
         this.calculateExposure();
@@ -838,10 +860,10 @@ window.addEventListener('load', function() {
                                 (2 * Math.pow(sig, 2))).toFixed(2));
 
       // ako je ekspozicija duža od 20 sekundi zaokruži vrednost
-      if (this.eqParams.exposure > 20) {
-        this.ekspozicija.innerHTML = Math.round(this.eqParams.exposure);
+      if (this.eqParams.exposure <= 20) {
+        this.ekspozicija.innerHTML = this.eqParams.exposure + "s";
       } else {
-        this.ekspozicija.innerHTML = this.eqParams.exposure;
+        this.ekspozicija.innerHTML = this.secondsToTime(Math.round(this.eqParams.exposure));
       }
     },
 

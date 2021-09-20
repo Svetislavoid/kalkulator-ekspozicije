@@ -1,6 +1,7 @@
     init: function() {
       this.cacheDom();
       this.bindEvent('click', this.submit, this.execute.bind(this));
+      this.bindEvent('click', this.back, this.goBack.bind(this));
       this.bindEvent('click', this.customTelescope, this.addCustomTelescope.bind(this));
       this.bindEvent('click', this.customReducer, this.addCustomReducer.bind(this));
       this.bindEvent('click', this.customCCD, this.addCustomCCD.bind(this));
@@ -86,6 +87,11 @@
 
     showHelp: function() {
       this.help.classList.toggle("collapsed");
+    },
+
+    goBack: function() {
+      this.form.classList.remove("hidden");
+      this.result.classList.add("hidden");
     },
 
     getQE: function(lambda, cameraQE) {
@@ -228,4 +234,22 @@
       ratio = rad_sum / all_sum;
 
       return ratio;
+    },
+
+    secondsToTime: function(secs) {
+      var hours = Math.floor(secs / 3600);
+      var minutes = Math.floor(secs % 3600 / 60);
+      var seconds = Math.floor(secs % 60);
+
+      var exposureTime;
+
+      if (hours) {
+        exposureTime = hours + "h " + minutes + "m " + seconds + "s" + " (" + secs + "s)";
+      } else if (minutes) {
+        exposureTime = minutes + "m " + seconds + "s" + " (" + secs + "s)";
+      } else {
+        exposureTime = seconds + "s";
+      }
+
+      return exposureTime;
     },

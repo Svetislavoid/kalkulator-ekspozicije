@@ -62,6 +62,7 @@
       this.customBand = document.querySelector('.customBand');
       this.form = document.querySelector('.form');
       this.result = document.querySelector('.result');
+      this.back = document.querySelector('.back');
       this.helpButton = document.querySelector('.helpButton');
       this.help = document.querySelector('.help');
 
