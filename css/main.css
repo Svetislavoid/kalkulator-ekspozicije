@@ -159,6 +159,13 @@ legend {
 
 .result p.showGraph {
   margin: 20px 0 0 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.result .showGraph > * {
+  cursor: pointer;
 }
 
 label {

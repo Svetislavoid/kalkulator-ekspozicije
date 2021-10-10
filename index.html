@@ -202,7 +202,10 @@
               <p>Read out noise: <span class="s_ro bold">0</span> e<sup>-</sup>/pix</p>
               <p>Number of pixels: <span class="n_pix bold">0</span> pix</p>
               <p class="ekspozicija bold">Exposure time: <span>0</span></p>
-              <p class="showGraph"><input type="checkbox" name="showGraph"> Show graph</p>
+              <p class="showGraph">
+                <input type="checkbox" id="showGraph" name="showGraph">
+                <label for="showGraph">Show graph</label>
+              </p>
             </section>
 
             <canvas id="canvas" class="collapsed" width="550" height="400"></canvas>
