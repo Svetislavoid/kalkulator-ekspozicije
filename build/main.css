@@ -160,12 +160,17 @@ legend {
 .result p.showGraph {
   margin: 20px 0 0 0;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
 }
 
-.result .showGraph > * {
+.result p.showGraph > * {
   cursor: pointer;
+}
+
+.result p.showGraph label {
+  width: unset;
+  padding: 0;
 }
 
 label {
