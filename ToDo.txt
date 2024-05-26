@@ -1,6 +1,6 @@
 1. Sky transparency prebaciti u airmass i dodati polje za upis vrednosti promene magnitude po jedinici airmass-e (staviti default vrednost) - ili računati airmass preko z
 2. Izbaciti polje Transparency on all optical elements - odrediti smanjenje fluksa direktno preko parametara instrumenata (refleksivnost ogledala, propusnost filtera itd - pogledati koji su sve - Mirametrics)
-3. Uzeti u obzir procenata fluksa koji upada u aperturu (pogledati growth curve), ubaciti i polje za aperturu
+3. Uzeti u obzir procenat fluksa koji upada u aperturu (pogledati growth curve), ubaciti i polje za aperturu
 4. Ubaciti polje za tip objekta (spread, point) i videti koja je razlika u izračunavanju
 
     Imaging, extended source:
