@@ -474,38 +474,38 @@
         extinctCoeff: 0   // NEMAM PODATAK
       },
       'G': {
-        wavelength: ,
+        wavelength: 4770,
         bandwidth: 1450,
-        fluxJY: ,
-        fluxPh: ,
+        fluxJY: 3631,
+        fluxPh: 1149.436059,
         extinctCoeff: 0
       },
       'R': {
-        wavelength: ,
-        bandwidth: ,
-        fluxJY: ,
-        fluxPh: ,
+        wavelength: 6231,
+        bandwidth: 1300,
+        fluxJY: 3631,
+        fluxPh: 879.924571,
         extinctCoeff: 0
       },
       'I': {
-        wavelength: ,
+        wavelength: 7625,
         bandwidth: 1500,
-        fluxJY: ,
-        fluxPh: ,
+        fluxJY: 3631,
+        fluxPh: 719.057049,
         extinctCoeff: 0
       },
       'ZS': {
-        wavelength: ,
+        wavelength: 8930,
         bandwidth: 980,
-        fluxJY: ,
-        fluxPh: ,
+        fluxJY: 3631,
+        fluxPh: 613.976484,
         extinctCoeff: 0
       },
       'Y': {
-        wavelength: ,
+        wavelength: 10200,
         bandwidth: 1060,
-        fluxJY: ,
-        fluxPh: ,
+        fluxJY: 3631,
+        fluxPh: 537.530392,
         extinctCoeff: 0
       },
       'custom': {
