@@ -304,14 +304,14 @@
         fluxPh: 1149.436059,
         extinctCoeff: 0
       },
-      'R': {
+      'R1': {
         wavelength: 6231,
         bandwidth: 1300,
         fluxJY: 3631,
         fluxPh: 879.924571,
         extinctCoeff: 0
       },
-      'I': {
+      'I1': {
         wavelength: 7625,
         bandwidth: 1500,
         fluxJY: 3631,
